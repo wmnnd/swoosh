@@ -3,6 +3,11 @@ defmodule Swoosh.InMemoryMailboxTest do
 
   alias Swoosh.InMemoryMailbox
 
+  setup do
+    InMemoryMailbox.delete_all()
+    :ok
+  end
+
   test "start_link/0 starts with an empty mailbox" do
     {:ok, pid} = GenServer.start_link(InMemoryMailbox, [])
     count = GenServer.call(pid, :all) |> Enum.count
