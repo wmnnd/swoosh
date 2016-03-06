@@ -101,10 +101,10 @@ defmodule Swoosh.Email do
     """
   end
 
-  defp format_recipient({name, address} = recipient) when is_binary(name) and is_binary(address) do
+  defp format_recipient({name, address} = recipient) when is_binary(name) and is_binary(address) and recipient != "" do
     recipient
   end
-  defp format_recipient(recipient) when is_binary(recipient) do
+  defp format_recipient(recipient) when is_binary(recipient) and recipient != "" do
     {"", recipient}
   end
   defp format_recipient(invalid) do

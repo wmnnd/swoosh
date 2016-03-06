@@ -21,6 +21,12 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 ## TODO
 
 * Mail structure
+    |> from()
+    |> to()
+    |> to()
+    |> cc()
+    |> bcc()
+    |> attach()
 *Adapters
   * Local (can be used for tests)
   * SMTP
@@ -39,3 +45,4 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
   * Scheduled sends
   * Templates
 * Attachments
+* Revisit plug dependency
