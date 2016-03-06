@@ -29,6 +29,7 @@ defmodule Swoosh.Mixfile do
 
   defp description do
     """
+    Make Email great again.
     """
   end
 
