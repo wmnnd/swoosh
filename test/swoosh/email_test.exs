@@ -18,7 +18,9 @@ defmodule Swoosh.EmailTest do
 
   test "from/2 should raise if from value is invalid" do
     assert_raise ArgumentError, fn -> %Email{} |> from(nil) end
+    assert_raise ArgumentError, fn -> %Email{} |> from("") end
     assert_raise ArgumentError, fn -> %Email{} |> from({nil, "tony@stark.com"}) end
+    assert_raise ArgumentError, fn -> %Email{} |> from({nil, ""}) end
   end
 
   test "subject/2" do
@@ -67,6 +69,7 @@ defmodule Swoosh.EmailTest do
 
   test "to/2 should raise if recipient(s) are invalid" do
     assert_raise ArgumentError, fn -> %Email{} |> to(nil) end
+    assert_raise ArgumentError, fn -> %Email{} |> to("") end
     assert_raise ArgumentError, fn -> %Email{} |> to({nil, "tony@stark.com"}) end
     assert_raise ArgumentError, fn -> %Email{} |> to([nil, "thor@odinson.com"]) end
     assert_raise ArgumentError, fn ->
@@ -89,6 +92,7 @@ defmodule Swoosh.EmailTest do
 
   test "put_to/2 should raise if recipient(s) are invalid" do
     assert_raise ArgumentError, fn -> %Email{} |> put_to(nil) end
+    assert_raise ArgumentError, fn -> %Email{} |> put_to("") end
     assert_raise ArgumentError, fn -> %Email{} |> put_to({nil, "tony@stark.com"}) end
     assert_raise ArgumentError, fn -> %Email{} |> put_to([nil, "thor@odinson.com"]) end
     assert_raise ArgumentError, fn ->
@@ -110,6 +114,7 @@ defmodule Swoosh.EmailTest do
 
   test "cc/2 should raise if recipient(s) are invalid" do
     assert_raise ArgumentError, fn -> %Email{} |> cc(nil) end
+    assert_raise ArgumentError, fn -> %Email{} |> cc("") end
     assert_raise ArgumentError, fn -> %Email{} |> cc({nil, "ccny@stark.com"}) end
     assert_raise ArgumentError, fn -> %Email{} |> cc([nil, "thor@odinson.com"]) end
     assert_raise ArgumentError, fn ->
@@ -132,6 +137,7 @@ defmodule Swoosh.EmailTest do
 
   test "put_cc/2 should raise if recipient(s) are invalid" do
     assert_raise ArgumentError, fn -> %Email{} |> put_cc(nil) end
+    assert_raise ArgumentError, fn -> %Email{} |> put_cc("") end
     assert_raise ArgumentError, fn -> %Email{} |> put_cc({nil, "ccny@stark.com"}) end
     assert_raise ArgumentError, fn -> %Email{} |> put_cc([nil, "thor@odinson.com"]) end
     assert_raise ArgumentError, fn ->
@@ -153,6 +159,7 @@ defmodule Swoosh.EmailTest do
 
   test "bcc/2 should raise if recipient(s) are invalid" do
     assert_raise ArgumentError, fn -> %Email{} |> bcc(nil) end
+    assert_raise ArgumentError, fn -> %Email{} |> bcc("") end
     assert_raise ArgumentError, fn -> %Email{} |> bcc({nil, "bccny@stark.com"}) end
     assert_raise ArgumentError, fn -> %Email{} |> bcc([nil, "thor@odinson.com"]) end
     assert_raise ArgumentError, fn ->
@@ -175,6 +182,7 @@ defmodule Swoosh.EmailTest do
 
   test "put_bcc/2 should raise if recipient(s) are invalid" do
     assert_raise ArgumentError, fn -> %Email{} |> put_bcc(nil) end
+    assert_raise ArgumentError, fn -> %Email{} |> put_bcc("") end
     assert_raise ArgumentError, fn -> %Email{} |> put_bcc({nil, "bccny@stark.com"}) end
     assert_raise ArgumentError, fn -> %Email{} |> put_bcc([nil, "thor@odinson.com"]) end
     assert_raise ArgumentError, fn ->
