@@ -12,7 +12,7 @@ defmodule Swoosh.Adapters.Sendgrid do
     Application.get_env(:swoosh, :sendgrid)[:base_url] || @base_url
   end
 
-  def deliver(%Swoosh.Email{} = email) do
+  def deliver(%Email{} = email) do
     headers = [{"Content-Type", "application/x-www-form-urlencoded"},
                {"User-Agent", "swoosh/#{Swoosh.version}"},
                {"Authorization", "Bearer #{@api_key}"}]
@@ -30,7 +30,7 @@ defmodule Swoosh.Adapters.Sendgrid do
     end
   end
 
-  def prepare_body(%Swoosh.Email{} = email) do
+  def prepare_body(%Email{} = email) do
     %{}
     |> prepare_from(email)
     |> prepare_to(email)
