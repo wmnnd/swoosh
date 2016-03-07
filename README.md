@@ -35,7 +35,12 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
     * Sendgrid
     * Mailgun
     * Mandrill?
-    * ...
+    * Postmark
+    * MailChimp
+    * mailjet
+    * socketlabs
+    * ElasticEmail
+    * postageapp
 * Easy testing
 * Delivery strategies
   * Now
