@@ -1,5 +1,5 @@
 defmodule Swoosh.Adapters.SendgridTest do
-  use ExUnit.Case, async: true
+  use AdapterCase, async: true
 
   import Swoosh.Email
   alias Swoosh.Adapters.Sendgrid
@@ -56,11 +56,6 @@ defmodule Swoosh.Adapters.SendgridTest do
     end
     assert Sendgrid.deliver(email) ==
            {:error, %{"errors" => ["Internal server error"], "message" => "error"}}
-  end
-
-  defp parse(conn, opts \\ []) do
-    opts = Keyword.put_new(opts, :parsers, [Plug.Parsers.URLENCODED])
-    Plug.Parsers.call(conn, Plug.Parsers.init(opts))
   end
 end
 
