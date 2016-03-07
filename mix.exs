@@ -6,6 +6,7 @@ defmodule Swoosh.Mixfile do
      version: "0.0.1",
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),
+     compilers: compilers(Mix.env),
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps,
@@ -18,13 +19,18 @@ defmodule Swoosh.Mixfile do
      mod: {Swoosh.Application, []}]
   end
 
+  defp compilers(:test), do: [:phoenix] ++ Mix.compilers
+  defp compilers(_), do: Mix.compilers
+
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_),     do: ["lib"]
 
   defp deps do
     [{:httpoison, "~> 0.8"},
      {:poison, "~> 2.1"},
-     {:bypass, "~> 0.5"}]
+     {:phoenix, "~> 1.1", only: [:test]},
+     {:phoenix_html, "~> 2.2", only: [:test]},
+     {:bypass, "~> 0.5", only: [:test]}]
   end
 
   defp description do
