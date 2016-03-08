@@ -221,6 +221,11 @@ defmodule Swoosh.EmailTest do
     end
   end
 
+  test "put_private/3" do
+    email = %Email{} |> put_private(:phoenix_layout, false)
+    assert email == %Email{private: %{phoenix_layout: false}}
+  end
+
   test "format_recipient/1 error messages" do
     assert_raise ArgumentError,
       """

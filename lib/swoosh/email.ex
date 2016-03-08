@@ -15,7 +15,8 @@ defmodule Swoosh.Email do
   """
 
   defstruct subject: "", from: nil, to: [], cc: [], bcc: [], text_body: nil,
-            html_body: nil, attachments: nil, reply_to: nil, headers: %{}
+            html_body: nil, attachments: nil, reply_to: nil, headers: %{},
+            private: %{}, assigns: %{}
 
   @doc """
   Sets the `from` header.
@@ -101,6 +102,15 @@ defmodule Swoosh.Email do
     """
   end
 
+  @doc """
+  Assigns a new **private** key and value in the email.
+
+  This storage is meant to be used by libraries, frameworks, and adapters.
+  """
+  def put_private(%__MODULE__{private: private} = email, key, value) when is_atom(key) do
+    %{email | private: Map.put(private, key, value)}
+  end
+
   defp format_recipient({name, address} = recipient) when is_binary(name) and is_binary(address) and recipient != "" do
     recipient
   end
@@ -118,3 +128,4 @@ defmodule Swoosh.Email do
     """
   end
 end
+
