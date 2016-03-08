@@ -4,9 +4,9 @@ defmodule Swoosh.Adapters.Sendgrid do
 
   @behaviour Swoosh.Adapter
 
+  @base_url "https://api.sendgrid.com/api/"
   @api_key Application.get_env(:swoosh, :sendgrid)[:api_key]
   @api_endpoint "mail.send.json"
-  @base_url "https://api.sendgrid.com/api/"
 
   def base_url() do
     Application.get_env(:swoosh, :sendgrid)[:base_url] || @base_url
