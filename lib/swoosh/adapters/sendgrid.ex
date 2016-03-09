@@ -53,7 +53,7 @@ defmodule Swoosh.Adapters.Sendgrid do
     |> Map.put(:fromname, name)
   end
 
-  def prepare_to(_body, %Email{to: []}), do: raise AgumentError, message: "`to` can't be empty"
+  def prepare_to(_body, %Email{to: []}), do: raise ArgumentError, message: "`to` can't be empty"
   def prepare_to(body, %Email{to: to}) do
     {names, addresses} = Enum.unzip(to)
     body
