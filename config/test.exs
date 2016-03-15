@@ -6,3 +6,5 @@ config :swoosh, :sendgrid,
 config :swoosh, :mailgun,
   api_key: "key-90210"
 
+config :swoosh, :mandrill,
+  api_key: "jarvis"

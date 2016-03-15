@@ -6,7 +6,11 @@ defmodule AdapterCase do
   using do
     quote do
       defp parse(conn, opts \\ []) do
-        opts = Keyword.put_new(opts, :parsers, [Plug.Parsers.URLENCODED])
+        opts =
+          opts
+          |> Keyword.put_new(:parsers, [Plug.Parsers.URLENCODED, Plug.Parsers.JSON])
+          |> Keyword.put_new(:json_decoder, Poison)
+
         Plug.Parsers.call(conn, Plug.Parsers.init(opts))
       end
     end
