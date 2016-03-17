@@ -4,21 +4,18 @@ defmodule Swoosh.Adapters.Sendgrid do
 
   @behaviour Swoosh.Adapter
 
-  @base_url "https://api.sendgrid.com/api/"
-  @api_key Application.get_env(:swoosh, :sendgrid)[:api_key]
-  @api_endpoint "mail.send.json"
+  @base_url "https://api.sendgrid.com/api"
+  @api_endpoint "/mail.send.json"
 
-  def base_url() do
-    Application.get_env(:swoosh, :sendgrid)[:base_url] || @base_url
-  end
+  def base_url(config \\ []), do: config[:base_url] || @base_url
 
-  def deliver(%Email{} = email) do
+  def deliver(%Email{} = email, config \\ []) do
     headers = [{"Content-Type", "application/x-www-form-urlencoded"},
                {"User-Agent", "swoosh/#{Swoosh.version}"},
-               {"Authorization", "Bearer #{@api_key}"}]
+               {"Authorization", "Bearer #{config[:api_key]}"}]
     body = prepare_body(email) |> Plug.Conn.Query.encode
 
-    case HTTPoison.post(base_url() <> @api_endpoint, body, headers) do
+    case HTTPoison.post(base_url(config) <> @api_endpoint, body, headers) do
       {:ok, %Response{status_code: code}} when code >= 200 and code <= 299 ->
         :ok
       {:ok, %Response{status_code: code, body: body}} when code >= 400 and code <= 499 ->

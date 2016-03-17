@@ -6,7 +6,8 @@ defmodule Swoosh.Adapters.MailgunTest do
 
   setup_all do
     bypass = Bypass.open
-    Application.put_env(:swoosh, :mailgun, %{base_url: "http://localhost:#{bypass.port}"})
+    config = [base_url: "http://localhost:#{bypass.port}",
+              domain: "/avengers.com"]
 
     valid_email =
       %Swoosh.Email{}
@@ -15,12 +16,10 @@ defmodule Swoosh.Adapters.MailgunTest do
       |> subject("Hello, Avengers!")
       |> html_body("<h1>Hello</h1>")
 
-    config = [domain: "/sandboxac405b2c12824f69b7cea45fb8cb6e10.mailgun.org"]
-
     {:ok, bypass: bypass, valid_email: valid_email, config: config}
   end
 
-  test "a sent email results in :ok", %{bypass: bypass, valid_email: email, config: config} do
+  test "a sent email results in :ok", %{bypass: bypass, config: config, valid_email: email} do
     Bypass.expect bypass, fn conn ->
       conn = parse(conn)
       expected_path = config[:domain] <> "/messages"
@@ -37,7 +36,7 @@ defmodule Swoosh.Adapters.MailgunTest do
     assert Mailgun.deliver(email, config) == :ok
   end
 
-  test "delivery/1 with 4xx response", %{bypass: bypass, valid_email: email, config: config} do
+  test "delivery/1 with 4xx response", %{bypass: bypass, config: config, valid_email: email} do
     Bypass.expect bypass, fn conn ->
       Plug.Conn.resp(conn, 401, "{\"errors\":[\"The provided authorization grant is invalid, expired, or revoked\"], \"message\":\"error\"}")
     end

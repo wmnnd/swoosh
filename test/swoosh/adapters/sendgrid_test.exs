@@ -6,10 +6,7 @@ defmodule Swoosh.Adapters.SendgridTest do
 
   setup_all do
     bypass = Bypass.open
-    sendgrid_env =
-      Application.get_env(:swoosh, :sendgrid)
-      |> Keyword.put(:base_url, "http://localhost:#{bypass.port}/")
-    Application.put_env(:swoosh, :sendgrid, sendgrid_env)
+    config = [base_url: "http://localhost:#{bypass.port}"]
 
     valid_email =
       %Swoosh.Email{}
@@ -19,10 +16,10 @@ defmodule Swoosh.Adapters.SendgridTest do
       |> html_body("<h1>Hello</h1>")
       |> text_body("Hello")
 
-    {:ok, bypass: bypass, valid_email: valid_email}
+    {:ok, bypass: bypass, config: config, valid_email: valid_email}
   end
 
-  test "successful delivery returns :ok", %{bypass: bypass, valid_email: email} do
+  test "successful delivery returns :ok", %{bypass: bypass, config: config, valid_email: email} do
     Bypass.expect bypass, fn conn ->
       conn = parse(conn)
       body_params = %{"from" => "tony@stark.com",
@@ -35,26 +32,26 @@ defmodule Swoosh.Adapters.SendgridTest do
       assert "POST" == conn.method
       Plug.Conn.resp(conn, 200, "{\"message\":\"success\"}")
     end
-    assert Sendgrid.deliver(email) == :ok
+    assert Sendgrid.deliver(email, config) == :ok
   end
 
-  test "delivery/1 with 4xx response", %{bypass: bypass, valid_email: email} do
+  test "delivery/1 with 4xx response", %{bypass: bypass, config: config, valid_email: email} do
     Bypass.expect bypass, fn conn ->
       assert "/mail.send.json" == conn.request_path
       assert "POST" == conn.method
       Plug.Conn.resp(conn, 401, "{\"errors\":[\"The provided authorization grant is invalid, expired, or revoked\"], \"message\":\"error\"}")
     end
-    assert Sendgrid.deliver(email) ==
+    assert Sendgrid.deliver(email, config) ==
            {:error, %{"errors" => ["The provided authorization grant is invalid, expired, or revoked"], "message" => "error"}}
   end
 
-  test "delivery/1 with 5xx response", %{bypass: bypass, valid_email: email} do
+  test "delivery/1 with 5xx response", %{bypass: bypass, config: config, valid_email: email} do
     Bypass.expect bypass, fn conn ->
       assert "/mail.send.json" == conn.request_path
       assert "POST" == conn.method
       Plug.Conn.resp(conn, 500, "{\"errors\":[\"Internal server error\"], \"message\":\"error\"}")
     end
-    assert Sendgrid.deliver(email) ==
+    assert Sendgrid.deliver(email, config) ==
            {:error, %{"errors" => ["Internal server error"], "message" => "error"}}
   end
 end
