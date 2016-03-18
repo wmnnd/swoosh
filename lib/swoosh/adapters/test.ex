@@ -4,7 +4,7 @@ defmodule Swoosh.Adapters.Test do
 
   @behaviour Swoosh.Adapter
 
-  def deliver(email, config \\ []) do
+  def deliver(email, _config) do
     send(self(), {:email, email})
   end
 end

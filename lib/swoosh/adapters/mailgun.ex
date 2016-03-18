@@ -73,13 +73,13 @@ defmodule Swoosh.Adapters.Mailgun do
   defp prepare_subject(_body, %Email{subject: nil}), do: raise ArgumentError, message: "`subject` can't be nil"
   defp prepare_subject(body, %Email{subject: subject}), do: Map.put(body, :subject, subject)
 
-  defp prepare_text(body, %{text_body: nil, html_body: nil}) do
+  defp prepare_text(_body, %{text_body: nil, html_body: nil}) do
     raise ArgumentError, message: "`html_body` and `text_body` cannot both be nil"
   end
   defp prepare_text(body, %{text_body: nil}), do: body
   defp prepare_text(body, %{text_body: text_body}), do: Map.put(body, :text, text_body)
 
-  defp prepare_html(body, %{html_body: nil, text_body: nil}) do
+  defp prepare_html(_body, %{html_body: nil, text_body: nil}) do
     raise ArgumentError, message: "`html_body` and `text_body` cannot both be nil"
   end
   defp prepare_html(body, %{html_body: nil}), do: body
