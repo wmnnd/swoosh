@@ -8,21 +8,16 @@ defmodule Swoosh.Mailer do
 
       def __adapter__, do: @adapter
 
-      def deliver(%Swoosh.Email{from: nil}) do
-        raise ArgumentError, "expected \"from\" to be set"
-      end
-      def deliver(%Swoosh.Email{to: nil}) do
-        raise ArgumentError, "expected \"to\" to be set"
-      end
+      def deliver(%Swoosh.Email{from: nil}), do: raise ArgumentError, "expected \"from\" to be set"
+      def deliver(%Swoosh.Email{from: {_name, nil}}), do: raise ArgumentError, "expected \"from\" address to be set"
+      def deliver(%Swoosh.Email{to: nil}), do: raise ArgumentError, "expected \"to\" to be set"
+      def deliver(%Swoosh.Email{to: []}), do: raise ArgumentError, "expected \"to\" not to be empty"
+      def deliver(%Swoosh.Email{subject: nil}), do: raise ArgumentError, "expected \"subject\" to be set"
       def deliver(%Swoosh.Email{html_body: nil, text_body: nil}) do
         raise ArgumentError, "expected \"html_body\" or \"text_body\" to be set"
       end
-      def deliver(%Swoosh.Email{} = email) do
-        @adapter.deliver(email, @config)
-      end
-      def deliver(email) do
-        raise ArgumentError, "expected %Swoosh.Email{}, got #{inspect email}"
-      end
+      def deliver(%Swoosh.Email{} = email), do: @adapter.deliver(email, @config)
+      def deliver(email), do: raise ArgumentError, "expected %Swoosh.Email{}, got #{inspect email}"
     end
   end
 
