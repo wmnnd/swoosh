@@ -48,7 +48,7 @@ defmodule Swoosh.Adapters.Mailgun do
     |> prepare_bcc(email)
   end
 
-  defp prepare_from(body, %Email{from: from}), do: Map.put(body, :from, prepare_recipient(from))
+  defp prepare_from(body, %Email{from: {_name, address}}), do: Map.put(body, :from, address)
 
   defp prepare_to(body, %Email{to: to}), do: Map.put(body, :to, prepare_recipients(to))
 
@@ -64,8 +64,8 @@ defmodule Swoosh.Adapters.Mailgun do
     |> Enum.join(",")
   end
 
-  defp prepare_recipient({"", email}), do: email
-  defp prepare_recipient({name, email}), do: name <> "<#{email}>"
+  defp prepare_recipient({"", address}), do: address
+  defp prepare_recipient({name, address}), do: "#{name} <#{address}>"
 
   defp prepare_subject(body, %Email{subject: subject}), do: Map.put(body, :subject, subject)
 

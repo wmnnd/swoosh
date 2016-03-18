@@ -34,8 +34,49 @@ defmodule Swoosh.Adapters.MandrillTest do
       assert body_params == conn.body_params
       assert "/messages/send.json" == conn.request_path
       assert "POST" == conn.method
-      Plug.Conn.resp(conn, 200,
-                    "[{\"email\":\"steve@rogers.com\",\"status\":\"sent\",\"_id\":\"968791b9f084486f9f65a4a6f93474ad\",\"reject_reason\":null}]")
+
+      response = "[{\"email\":\"steve@rogers.com\",\"status\":\"sent\",\"_id\":\"9\",\"reject_reason\":null}]"
+      Plug.Conn.resp(conn, 200, response)
+    end
+
+    assert Mandrill.deliver(email, config) == :ok
+  end
+
+  test "delivery/1 with all fields returns :ok", %{bypass: bypass, config: config} do
+    email =
+      %Swoosh.Email{}
+      |> from({"T Stark", "tony@stark.com"})
+      |> to({"Steve Rogers", "steve@rogers.com"})
+      |> to("wasp@avengers.com")
+      |> cc({"Bruce Banner", "hulk@smash.com"})
+      |> cc("thor@odinson.com")
+      |> bcc({"Clinton Francis Barton", "hawk@eye.com"})
+      |> bcc("beast@avengers.com")
+      |> subject("Hello, Avengers!")
+      |> html_body("<h1>Hello</h1>")
+      |> text_body("Hello")
+
+    Bypass.expect bypass, fn conn ->
+      conn = parse(conn)
+      body_params = %{"key" => "jarvis",
+                      "message" => %{
+                        "subject" => "Hello, Avengers!",
+                        "to" => [%{"type" => "bcc", "email" => "beast@avengers.com"},
+                                 %{"type" => "bcc", "email" => "hawk@eye.com", "name" => "Clinton Francis Barton"},
+                                 %{"type" => "cc", "email" => "thor@odinson.com"},
+                                 %{"type" => "cc", "email" => "hulk@smash.com", "name" => "Bruce Banner"},
+                                 %{"type" => "to", "email" => "wasp@avengers.com"},
+                                 %{"type" => "to", "email" => "steve@rogers.com", "name" => "Steve Rogers"}],
+                        "from_name" => "T Stark",
+                        "from_email" => "tony@stark.com",
+                        "html" => "<h1>Hello</h1>",
+                        "text" => "Hello"}}
+      assert body_params == conn.body_params
+      assert "/messages/send.json" == conn.request_path
+      assert "POST" == conn.method
+
+      response = "[{\"email\":\"steve@rogers.com\",\"status\":\"sent\",\"_id\":\"9\",\"reject_reason\":null}]"
+      Plug.Conn.resp(conn, 200, response)
     end
 
     assert Mandrill.deliver(email, config) == :ok

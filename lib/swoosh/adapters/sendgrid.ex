@@ -39,9 +39,7 @@ defmodule Swoosh.Adapters.Sendgrid do
     |> prepare_reply_to(email)
   end
 
-  def prepare_from(body, %Email{from: {name, address}}) when is_nil(name) or name == "" do
-    Map.put(body, :from, address)
-  end
+  def prepare_from(body, %Email{from: {"", address}}), do: Map.put(body, :from, address)
   def prepare_from(body, %Email{from: {name, address}}) do
     body
     |> Map.put(:from, address)
@@ -52,7 +50,7 @@ defmodule Swoosh.Adapters.Sendgrid do
     {names, addresses} = Enum.unzip(to)
     body
     |> prepare_addresses(:to, addresses)
-    |> prepare_names(:to, names)
+    |> prepare_names(:toname, names)
   end
 
   def prepare_cc(body, %Email{cc: []}), do: body
@@ -60,7 +58,7 @@ defmodule Swoosh.Adapters.Sendgrid do
     {names, addresses} = Enum.unzip(cc)
     body
     |> prepare_addresses(:cc, addresses)
-    |> prepare_names(:cc, names)
+    |> prepare_names(:ccname, names)
   end
 
   def prepare_bcc(body, %Email{bcc: []}), do: body
@@ -68,12 +66,10 @@ defmodule Swoosh.Adapters.Sendgrid do
     {names, addresses} = Enum.unzip(bcc)
     body
     |> prepare_addresses(:bcc, addresses)
-    |> prepare_names(:bcc, names)
+    |> prepare_names(:bccname, names)
   end
 
-  def prepare_subject(body, %Email{subject: subject}) do
-    Map.put(body, :subject, subject)
-  end
+  def prepare_subject(body, %Email{subject: subject}), do: Map.put(body, :subject, subject)
 
   def prepare_html_body(body, %Email{html_body: nil}), do: body
   def prepare_html_body(body, %Email{html_body: html_body}) do
@@ -81,18 +77,12 @@ defmodule Swoosh.Adapters.Sendgrid do
   end
 
   def prepare_text_body(body, %Email{text_body: nil}), do: body
-  def prepare_text_body(body, %Email{text_body: text_body}) do
-    Map.put(body, :text, text_body)
-  end
+  def prepare_text_body(body, %Email{text_body: text_body}), do: Map.put(body, :text, text_body)
 
   def prepare_reply_to(body, %Email{reply_to: nil}), do: body
-  def prepare_reply_to(body, %Email{reply_to: reply_to}) do
-    Map.put(body, :replyto, reply_to)
-  end
+  def prepare_reply_to(body, %Email{reply_to: reply_to}), do: Map.put(body, :replyto, reply_to)
 
-  defp prepare_addresses(body, field, addresses) do
-    Map.put(body, field, addresses)
-  end
+  defp prepare_addresses(body, field, addresses), do: Map.put(body, field, addresses)
   defp prepare_names(body, field, names) do
     if list_empty?(names), do: body, else: Map.put(body, field, names)
   end
