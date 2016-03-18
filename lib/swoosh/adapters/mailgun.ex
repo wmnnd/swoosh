@@ -5,16 +5,15 @@ defmodule Swoosh.Adapters.Mailgun do
   @behaviour Swoosh.Adapter
 
   @base_url     "https://api.mailgun.net/v3"
-  @api_key      Application.get_env(:swoosh, :mailgun)[:api_key]
   @api_endpoint "/messages"
 
-  def base_url, do: Application.get_env(:swoosh, :mailgun)[:base_url] || @base_url
+  def base_url(config), do: config[:base_url] || @base_url
 
   def deliver(%Email{} = email, config \\ []) do
-    headers = construct_headers(email)
+    headers = construct_headers(email, config)
     params = prepare_body(email) |> Plug.Conn.Query.encode
 
-    case HTTPoison.post(base_url <> config[:domain] <> @api_endpoint, params, headers) do
+    case HTTPoison.post(base_url(config) <> config[:domain] <> @api_endpoint, params, headers) do
       {:ok, %Response{status_code: code}} when code >= 200 and code <= 299 ->
         :ok
       {:ok, %Response{status_code: code, body: body}} when code >= 400 and code <= 499 ->
@@ -26,13 +25,13 @@ defmodule Swoosh.Adapters.Mailgun do
     end
   end
 
-  defp construct_headers(email) do
+  defp construct_headers(email, config) do
     [{"User-Agent", "swoosh/#{Swoosh.version}"},
-     {"Authorization", "Basic #{auth}"},
+     {"Authorization", "Basic #{auth(config)}"},
      {"Content-Type", content_type(email)}]
   end
 
-  defp auth, do: Base.encode64("api:" <> @api_key)
+  defp auth(config), do: Base.encode64("api: #{config[:api_key]}")
 
   defp content_type(%Email{attachments: nil}), do: "application/x-www-form-urlencoded"
   defp content_type(%Email{attachments: []}), do: "application/x-www-form-urlencoded"

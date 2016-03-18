@@ -5,16 +5,15 @@ defmodule Swoosh.Adapters.Mandrill do
   @behaviour Swoosh.Adapter
 
   @base_url     "https://mandrillapp.com/api/1.0"
-  @api_key      Application.get_env(:swoosh, :mandrill)[:api_key]
   @api_endpoint "/messages/send.json"
   @headers      [{"Content-Type", "application/json"}]
 
-  def base_url, do: Application.get_env(:swoosh, :mandrill)[:base_url] || @base_url
+  def base_url(config), do: config[:base_url] || @base_url
 
   def deliver(%Email{} = email, config \\ []) do
-    params = prepare_body(email) |> Poison.encode!
+    body = prepare_body(email, config) |> Poison.encode!
 
-    case HTTPoison.post(base_url <> @api_endpoint, params, @headers) do
+    case HTTPoison.post(base_url(config) <> @api_endpoint, body, @headers) do
       {:ok, %Response{status_code: 200, body: body}} ->
         interpret_response(body)
       {:ok, %Response{status_code: code, body: body}} when code != 200 ->
@@ -30,7 +29,13 @@ defmodule Swoosh.Adapters.Mandrill do
   defp interpret_response(%{"status" => "rejected"} = body), do: {:error, body}
   defp interpret_response(body), do: {:error, Poison.decode!(body)}
 
-  defp prepare_body(email) do
+  defp prepare_body(email, config) do
+    %{message: prepare_message(email)}
+    |> set_async(email)
+    |> set_api_key(config)
+  end
+
+  defp prepare_message(email) do
     message =
       %{to: []}
       |> prepare_from(email)
@@ -40,10 +45,9 @@ defmodule Swoosh.Adapters.Mandrill do
       |> prepare_text(email)
       |> prepare_cc(email)
       |> prepare_bcc(email)
-
-    %{key: @api_key, message: message}
-    |> set_async(email)
   end
+
+  def set_api_key(body, config), do: Map.put(body, :key, config[:api_key])
 
   def set_async(body, %Email{private: %{async: true}}), do: Map.put(body, :async, true)
   def set_async(body, _email), do: body

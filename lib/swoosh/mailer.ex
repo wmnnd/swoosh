@@ -18,7 +18,7 @@ defmodule Swoosh.Mailer do
         raise ArgumentError, "expected \"html_body\" or \"text_body\" to be set"
       end
       def deliver(%Swoosh.Email{} = email) do
-        @adapter.deliver(email)
+        @adapter.deliver(email, @config)
       end
       def deliver(email) do
         raise ArgumentError, "expected %Swoosh.Email{}, got #{inspect email}"
