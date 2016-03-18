@@ -27,9 +27,19 @@ Heck, you can use several services simultaneously if you choose.
 Define a mailer...
 
 ```elixir
-defmodule Mailer do
-  use Swoosh.Mailer, otp_app: :swoosh, adapter: Swoosh.Sendgrid
+# lib/my_app/mailer.ex
+defmodule MyApp.Mailer do
+  use Swoosh.Mailer, otp_app: :my_app
 end
+```
+
+Configure it:
+
+```elixir
+# config/config.exs
+config :my_app, MyApp.Mailer,
+  adapter: Swoosh.Adapters.Sendgrid,
+  api_key: "SG.x.x"
 ```
 
 Then send an email...
@@ -43,22 +53,13 @@ email =
   |> html_body("<h1>Hello</h1>")
   |> text_body("Hello\n")
 
-AvengersMailer.deliver(email)
+MyApp.Mailer.deliver(email)
 ```
-
-It may be necessary to provide some extra configuration to your adapter, depending on the service you are using  This
-can be achieved by passing a `Map` for the second argument, like so:
-
-```elixir
-AvengersMailer.deliver(email, %{domain: "stark.com"})
-```
-
 
 ## Documentation
 
 Documentation is written into the library, you will find it in the source code, accessible from `iex` and of course, it
 all gets published to [hexdocs](http://hexdocs.pm/swoosh).
-
 
 ## Contributing
 
