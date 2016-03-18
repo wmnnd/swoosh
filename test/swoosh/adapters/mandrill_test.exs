@@ -83,7 +83,7 @@ defmodule Swoosh.Adapters.MandrillTest do
   end
 
   test "a queued email results in :ok", %{bypass: bypass, config: config, valid_email: email} do
-    email = put_private(email, :async, true)
+    email = put_provider_option(email, :async, true)
     Bypass.expect bypass, fn conn ->
       conn = parse(conn)
       assert true == conn.body_params["async"]
