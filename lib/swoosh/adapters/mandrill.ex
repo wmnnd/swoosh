@@ -51,8 +51,6 @@ defmodule Swoosh.Adapters.Mandrill do
   def set_async(body, %Email{private: %{async: true}}), do: Map.put(body, :async, true)
   def set_async(body, _email), do: body
 
-  defp prepare_from(_body, %Email{from: nil}), do: raise ArgumentError, message: "`from` can't be nil"
-  defp prepare_from(_body, %Email{from: {_name, nil}}), do: raise ArgumentError, message: "`from` can't be nil"
   defp prepare_from(body, %Email{from: {nil, address}}), do: Map.put(body, :from_email, address)
   defp prepare_from(body, %Email{from: {name, address}}) do
     body
@@ -60,7 +58,6 @@ defmodule Swoosh.Adapters.Mandrill do
     |> Map.put(:from_email, address)
   end
 
-  defp prepare_to(_body, %Email{to: []}), do: raise ArgumentError, message: "`to` can't be nil"
   defp prepare_to(body, %Email{to: to}), do: prepare_recipients(body, to)
 
   defp prepare_cc(body, %Email{cc: []}), do: body
@@ -81,18 +78,11 @@ defmodule Swoosh.Adapters.Mandrill do
   defp prepare_recipient({"", email}, type), do: %{email: email, type: type}
   defp prepare_recipient({name, email}, type), do: %{email: email, name: name, type: type}
 
-  defp prepare_subject(_body, %Email{subject: nil}), do: raise ArgumentError, message: "`subject` can't be nil"
   defp prepare_subject(body, %Email{subject: subject}), do: Map.put(body, :subject, subject)
 
-  defp prepare_text(_body, %{text_body: nil, html_body: nil}) do
-    raise ArgumentError, message: "`html_body` and `text_body` cannot both be nil"
-  end
   defp prepare_text(body, %{text_body: nil}), do: body
   defp prepare_text(body, %{text_body: text_body}), do: Map.put(body, :text, text_body)
 
-  defp prepare_html(_body, %{html_body: nil, text_body: nil}) do
-    raise ArgumentError, message: "`html_body` and `text_body` cannot both be nil"
-  end
   defp prepare_html(body, %{html_body: nil}), do: body
   defp prepare_html(body, %{html_body: html_body}), do: Map.put(body, :html, html_body)
 end

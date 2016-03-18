@@ -39,8 +39,6 @@ defmodule Swoosh.Adapters.Sendgrid do
     |> prepare_reply_to(email)
   end
 
-  def prepare_from(_body, %Email{from: nil}), do: raise ArgumentError, message: "`from` can't be nil"
-  def prepare_from(_body, %Email{from: {_name, nil}}), do: raise ArgumentError, message: "`from` address can't be nil"
   def prepare_from(body, %Email{from: {name, address}}) when is_nil(name) or name == "" do
     Map.put(body, :from, address)
   end
@@ -50,7 +48,6 @@ defmodule Swoosh.Adapters.Sendgrid do
     |> Map.put(:fromname, name)
   end
 
-  def prepare_to(_body, %Email{to: []}), do: raise ArgumentError, message: "`to` can't be empty"
   def prepare_to(body, %Email{to: to}) do
     {names, addresses} = Enum.unzip(to)
     body
@@ -74,7 +71,6 @@ defmodule Swoosh.Adapters.Sendgrid do
     |> prepare_names(:bcc, names)
   end
 
-  def prepare_subject(_body, %Email{subject: nil}), do: raise ArgumentError, message: "`subject` can't be nil"
   def prepare_subject(body, %Email{subject: subject}) do
     Map.put(body, :subject, subject)
   end

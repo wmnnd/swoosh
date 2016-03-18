@@ -29,9 +29,19 @@ defmodule Swoosh.MailerTest do
     assert_raise ArgumentError, "expected \"from\" to be set", fn ->
       Map.put(valid_email, :from, nil) |> FakeMailer.deliver()
     end
+    assert_raise ArgumentError, "expected \"from\" address to be set", fn ->
+      Map.put(valid_email, :from, {"Name", nil}) |> FakeMailer.deliver()
+    end
 
     assert_raise ArgumentError, "expected \"to\" to be set", fn ->
       Map.put(valid_email, :to, nil) |> FakeMailer.deliver()
+    end
+    assert_raise ArgumentError, "expected \"to\" not to be empty", fn ->
+      Map.put(valid_email, :to, []) |> FakeMailer.deliver()
+    end
+
+    assert_raise ArgumentError, "expected \"subject\" to be set", fn ->
+      Map.put(valid_email, :subject, nil) |> FakeMailer.deliver()
     end
 
     assert_raise ArgumentError, "expected \"html_body\" or \"text_body\" to be set", fn ->
@@ -41,4 +51,5 @@ defmodule Swoosh.MailerTest do
       |> FakeMailer.deliver()
     end
   end
+
 end

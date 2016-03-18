@@ -36,14 +36,10 @@ defmodule Swoosh.Adapters.SMTP do
     |> prepare_from(email)
   end
 
-  defp prepare_subject(_headers, %Email{subject: nil}), do: raise ArgumentError, message: "`subject` can't be nil"
   defp prepare_subject(headers, %Email{subject: subject}), do: [{"Subject", subject} | headers]
 
-  defp prepare_from(_headers, %Email{from: nil}), do: raise ArgumentError, message: "`from` can't be nil"
-  defp prepare_from(_headers, %Email{from: {_name, nil}}), do: raise ArgumentError, message: "`from` address can't be nil"
   defp prepare_from(headers, %Email{from: from}), do: [{"From", prepare_recipient(from)} | headers]
 
-  defp prepare_to(_headers, %Email{to: []}), do: raise ArgumentError, message: "`to` can't be empty"
   defp prepare_to(headers, %Email{to: to}), do: [{"To", "#{prepare_recipients(to)}"} | headers]
 
   defp prepare_cc(headers, %Email{cc: []}), do: headers
