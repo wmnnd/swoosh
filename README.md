@@ -65,3 +65,7 @@ all gets published to [hexdocs](http://hexdocs.pm/swoosh).
 We are greatful for any contributions, please look at the [Code of Conduct](CODE_OF_CONDUCT.md) and
 [Contributing guidelines](CONTRIBUTING.md) to find out more.  We use GitHub Issues to keep track of features and bugs, usually
 there will be a milestone for each release, so you can see what is coming next.
+
+## LICENSE
+
+See [LICENSE](https://github.com/swoosh/swoosh/blob/master/LICENSE.txt)
