@@ -24,7 +24,7 @@ defmodule Swoosh.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :httpoison, :gen_smtp],
+    [applications: [:logger, :httpoison, :cowboy, :plug],
      mod: {Swoosh.Application, []}]
   end
 
@@ -35,6 +35,8 @@ defmodule Swoosh.Mixfile do
     [{:httpoison, "~> 0.8"},
      {:poison, "~> 2.1"},
      {:gen_smtp, "~> 0.9.0"},
+     {:cowboy, "~> 1.0.0", optional: true},
+     {:plug, "~> 1.1", optional: true},
      {:credo, "~> 0.3", only: [:dev, :test]},
      {:bypass, "~> 0.5", only: [:test]},
      {:ex_doc, "~> 0.10", only: :docs},

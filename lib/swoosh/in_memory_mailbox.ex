@@ -21,11 +21,15 @@ defmodule Swoosh.InMemoryMailbox do
   @doc """
   """
   def push(email) do
-    GenServer.cast(__MODULE__, {:push, email})
+    GenServer.call(__MODULE__, {:push, email})
   end
 
   def pop() do
     GenServer.call(__MODULE__, :pop)
+  end
+
+  def get(id) do
+    GenServer.call(__MODULE__, {:get, id})
   end
 
   def all() do
@@ -38,8 +42,23 @@ defmodule Swoosh.InMemoryMailbox do
 
   # Callbacks
 
+  def init(_args) do
+    {:ok, []}
+  end
+
+  def handle_call({:push, email}, _from, state) do
+    id = :crypto.rand_bytes(16) |> Base.encode16
+    email = email |> Swoosh.Email.header("Message-ID", id)
+    {:reply, email, [email] ++ state}
+  end
+
   def handle_call(:pop, _from, [h|t]) do
     {:reply, h, t}
+  end
+
+  def handle_call({:get, id}, _from, state) do
+    email = Enum.find(state, nil, fn %Swoosh.Email{headers: %{"Message-ID" => mid}} -> mid == id end)
+    {:reply, email, state}
   end
 
   def handle_call(:all, _from, state) do
@@ -52,10 +71,6 @@ defmodule Swoosh.InMemoryMailbox do
 
   def handle_call(msg, from, state) do
     super(msg, from, state)
-  end
-
-  def handle_cast({:push, email}, state) do
-    {:noreply, [email] ++ state}
   end
 
   def handle_cast(msg, state) do

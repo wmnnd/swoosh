@@ -149,6 +149,43 @@ defmodule Sample.UserTest do
 end
 ```
 
+## Mailbox preview in the browser
+
+Swoosh ships with a Plug that allows you to preview the emails in the local (in-memory) mailbox. It's particularly
+convenient in development when you want to check what your email will look like while testing the various flows of your
+application.
+
+For email to reach this mailbox you will need to set your `Mailer` adapter to `Swoosh.Adapters.Local`:
+
+```elixir
+# in config/dev.exs
+config :sample, Mailer,
+  adapter: Swoosh.Adapters.Local
+```
+
+Then, use the Mix task to start the mailbox preview server
+
+```console
+$ mix swoosh.mailbox.server
+```
+
+Or in your Phoenix project you can `forward` directly to the plug, like this:
+
+```elixir
+# in web/router.ex
+if Mix.env == :dev do
+  scope "/dev" do
+    pipe_through [:browser]
+
+    forward "/mailbox", Plug.Swoosh.MailboxPreview, [base_path: "/dev/mailbox"]
+  end
+end
+```
+
+If you are curious, this is how it looks:
+
+![Plug.Swoosh.MailboxPreview](https://github.com/swoosh/swoosh/raw/master/images/mailbox-preview.png)
+
 ## Documentation
 
 Documentation is written into the library, you will find it in the source code, accessible from `iex` and of course, it
