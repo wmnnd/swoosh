@@ -30,7 +30,41 @@ defmodule Swoosh.Adapters.MailgunTest do
       assert body_params == conn.body_params
       assert expected_path == conn.request_path
       assert "POST" == conn.method
-      Plug.Conn.resp(conn, 200, "<h1>hai</h1>")
+      Plug.Conn.resp(conn, 200, "OK")
+    end
+
+    assert Mailgun.deliver(email, config) == :ok
+  end
+
+  test "delivery/1 with all fields returns :ok", %{bypass: bypass, config: config} do
+    email =
+      %Swoosh.Email{}
+      |> from({"T Stark", "tony@stark.com"})
+      |> to({"Steve Rogers", "steve@rogers.com"})
+      |> to("wasp@avengers.com")
+      |> cc({"Bruce Banner", "hulk@smash.com"})
+      |> cc("thor@odinson.com")
+      |> bcc({"Clinton Francis Barton", "hawk@eye.com"})
+      |> bcc("beast@avengers.com")
+      |> subject("Hello, Avengers!")
+      |> html_body("<h1>Hello</h1>")
+      |> text_body("Hello")
+
+    Bypass.expect bypass, fn conn ->
+      conn = parse(conn)
+      expected_path = config[:domain] <> "/messages"
+      body_params = %{"subject" => "Hello, Avengers!",
+                      "to" => "wasp@avengers.com,Steve Rogers <steve@rogers.com>",
+                      "bcc" => "beast@avengers.com,Clinton Francis Barton <hawk@eye.com>",
+                      "cc" => "thor@odinson.com,Bruce Banner <hulk@smash.com>",
+                      "from" => "tony@stark.com",
+                      "text" => "Hello",
+                      "html" => "<h1>Hello</h1>"}
+      assert body_params == conn.body_params
+      assert expected_path == conn.request_path
+      assert "POST" == conn.method
+
+      Plug.Conn.resp(conn, 200, "OK")
     end
 
     assert Mailgun.deliver(email, config) == :ok

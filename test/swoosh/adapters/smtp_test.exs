@@ -19,10 +19,31 @@ defmodule Swoosh.Adapters.SMTPTest do
   test "simple email", %{valid_email: email} do
     email = email |> html_body(nil)
     assert SMTP.prepare_message(email) ==
-    {"text", "plain",
+     {"text", "plain",
       [{"Content-Type", "text/plain; charset=\"utf-8\""},
         {"From", "tony@stark.com"},
         {"To", "steve@rogers.com"},
+        {"Subject", "Hello, Avengers!"},
+        {"Mime-Version", "1.0"}],
+      "Hello"}
+  end
+
+  test "simple email with all basic fields", %{valid_email: email} do
+    email =
+      email
+      |> html_body(nil)
+      |> to({"Janet Pym", "wasp@avengers.com"})
+      |> cc({"Bruce Banner", "hulk@smash.com"})
+      |> cc("thor@odinson.com")
+      |> bcc({"Clinton Francis Barton", "hawk@eye.com"})
+      |> bcc("beast@avengers.com")
+
+    assert SMTP.prepare_message(email) ==
+    {"text", "plain",
+      [{"Content-Type", "text/plain; charset=\"utf-8\""},
+        {"From", "tony@stark.com"},
+        {"To", "Janet Pym <wasp@avengers.com>, steve@rogers.com"},
+        {"Cc", "thor@odinson.com, Bruce Banner <hulk@smash.com>"},
         {"Subject", "Hello, Avengers!"},
         {"Mime-Version", "1.0"}],
       "Hello"}

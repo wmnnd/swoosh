@@ -35,6 +35,42 @@ defmodule Swoosh.Adapters.SendgridTest do
     assert Sendgrid.deliver(email, config) == :ok
   end
 
+  test "delivery/1 with all fields returns :ok", %{bypass: bypass, config: config} do
+    email =
+      %Swoosh.Email{}
+      |> from({"T Stark", "tony@stark.com"})
+      |> to({"Steve Rogers", "steve@rogers.com"})
+      |> reply_to("hulk@smash.com")
+      |> cc("hulk@smash.com")
+      |> cc({"Janet Pym", "wasp@avengers.com"})
+      |> bcc("thor@odinson.com")
+      |> bcc({"Henry McCoy", "beast@avengers.com"})
+      |> subject("Hello, Avengers!")
+      |> html_body("<h1>Hello</h1>")
+      |> text_body("Hello")
+
+    Bypass.expect bypass, fn conn ->
+      conn = parse(conn)
+      body_params = %{"from" => "tony@stark.com",
+                      "fromname" => "T Stark",
+                      "to" => ["steve@rogers.com"],
+                      "toname" => ["Steve Rogers"],
+                      "replyto" => "hulk@smash.com",
+                      "cc" => ["wasp@avengers.com", "hulk@smash.com"],
+                      "ccname" => ["Janet Pym", ""],
+                      "bcc" => ["beast@avengers.com", "thor@odinson.com"],
+                      "bccname" => ["Henry McCoy", ""],
+                      "html" => "<h1>Hello</h1>",
+                      "subject" => "Hello, Avengers!",
+                      "text" => "Hello"}
+      assert body_params == conn.body_params
+      assert "/mail.send.json" == conn.request_path
+      assert "POST" == conn.method
+      Plug.Conn.resp(conn, 200, "{\"message\":\"success\"}")
+    end
+    assert Sendgrid.deliver(email, config) == :ok
+  end
+
   test "delivery/1 with 4xx response", %{bypass: bypass, config: config, valid_email: email} do
     Bypass.expect bypass, fn conn ->
       assert "/mail.send.json" == conn.request_path
