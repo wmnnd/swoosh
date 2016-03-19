@@ -23,7 +23,7 @@ defmodule Swoosh.Email do
 
   Valid formats:
   * `"tony@stark.com"`
-  * `{"Tony Stark", "tony@stark.com"}
+  * `{"Tony Stark", "tony@stark.com"}`
   """
   def from(%__MODULE__{} = email, from) do
     from = format_recipient(from)
@@ -35,7 +35,7 @@ defmodule Swoosh.Email do
 
   Valid formats:
   * `"tony@stark.com"`
-  * `{"Tony Stark", "tony@stark.com"}
+  * `{"Tony Stark", "tony@stark.com"}`
   """
   def reply_to(%__MODULE__{} = email, reply_to) do
     reply_to = format_recipient(reply_to)
@@ -48,7 +48,7 @@ defmodule Swoosh.Email do
 
     Valid formats:
     * `"tony@stark.com"`
-    * `{"Tony Stark", "tony@stark.com"}
+    * `{"Tony Stark", "tony@stark.com"}`
     """
     def unquote(fun)(%__MODULE__{} = email, value) do
       %{email | unquote(fun) => value}
@@ -61,7 +61,7 @@ defmodule Swoosh.Email do
 
     Valid formats for recipients:
     * `"tony@stark.com"`
-    * `{"Tony Stark", "tony@stark.com"}
+    * `{"Tony Stark", "tony@stark.com"}`
     """
     def unquote(fun)(%__MODULE__{unquote(fun) => existing_recipients} = email, recipients) when is_list(recipients) do
       recipients =
@@ -81,7 +81,7 @@ defmodule Swoosh.Email do
 
     Valid formats for recipients:
     * `"tony@stark.com"`
-    * `{"Tony Stark", "tony@stark.com"}
+    * `{"Tony Stark", "tony@stark.com"}`
     """
     def unquote(:"put_#{fun}")(%__MODULE__{} = email, recipients) when is_list(recipients) do
       recipients =

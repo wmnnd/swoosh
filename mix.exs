@@ -1,16 +1,26 @@
 defmodule Swoosh.Mixfile do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [app: :swoosh,
-     version: "0.0.1",
+     version: @version,
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps,
+
+     # Hex
      description: description,
-     package: package]
+     package: package,
+
+     # Docs
+     name: "Swoosh",
+     docs: [source_ref: "v#{@version}", main: "Swoosh",
+            canonical: "http://hexdocs.pm/swoosh",
+            source_url: "https://github.com/swoosh/swoosh"]]
   end
 
   def application do
@@ -26,19 +36,22 @@ defmodule Swoosh.Mixfile do
      {:poison, "~> 2.1"},
      {:gen_smtp, "~> 0.9.0"},
      {:credo, "~> 0.3", only: [:dev, :test]},
-     {:bypass, "~> 0.5", only: [:test]}]
+     {:bypass, "~> 0.5", only: [:test]},
+     {:ex_doc, "~> 0.10", only: :docs},
+     {:earmark, "~> 0.1", only: :docs},
+     {:inch_ex, ">= 0.0.0", only: :docs}]
   end
 
   defp description do
     """
-    Make Email great again.
+    Compose, deliver and test your emails easily in Elixir. Supports SMTP, Sendgrid, Mandrill and Mailgun out of the box.
+    Works great with Phoenix.
     """
   end
 
   defp package do
-    [maintainers: [],
+    [maintainers: ["Steve Domin", "Baris Balic"],
      licenses: ["MIT"],
-     links: %{"GitHub" => ""}]
+     links: %{"GitHub" => "https://github.com/swoosh/swoosh"}]
   end
-
 end

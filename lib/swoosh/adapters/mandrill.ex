@@ -8,8 +8,6 @@ defmodule Swoosh.Adapters.Mandrill do
   @api_endpoint "/messages/send.json"
   @headers      [{"Content-Type", "application/json"}]
 
-  def base_url(config), do: config[:base_url] || @base_url
-
   def deliver(%Email{} = email, config \\ []) do
     body = email |> prepare_body(config) |> Poison.encode!
 
@@ -29,6 +27,8 @@ defmodule Swoosh.Adapters.Mandrill do
   defp interpret_response(%{"status" => "rejected"} = body), do: {:error, body}
   defp interpret_response(body), do: {:error, Poison.decode!(body)}
 
+  defp base_url(config), do: config[:base_url] || @base_url
+
   defp prepare_body(email, config) do
     %{message: prepare_message(email)}
     |> set_async(email)
@@ -46,10 +46,10 @@ defmodule Swoosh.Adapters.Mandrill do
     |> prepare_bcc(email)
   end
 
-  def set_api_key(body, config), do: Map.put(body, :key, config[:api_key])
+  defp set_api_key(body, config), do: Map.put(body, :key, config[:api_key])
 
-  def set_async(body, %Email{provider_options: %{async: true}}), do: Map.put(body, :async, true)
-  def set_async(body, _email), do: body
+  defp set_async(body, %Email{provider_options: %{async: true}}), do: Map.put(body, :async, true)
+  defp set_async(body, _email), do: body
 
   defp prepare_from(body, %Email{from: {nil, address}}), do: Map.put(body, :from_email, address)
   defp prepare_from(body, %Email{from: {name, address}}) do
