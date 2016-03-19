@@ -30,7 +30,19 @@ defmodule Swoosh.Email do
     %{email | from: from}
   end
 
-  for fun <- [:subject, :text_body, :html_body, :reply_to] do
+  @doc """
+  Sets the `reply_to` header.
+
+  Valid formats:
+  * `"tony@stark.com"`
+  * `{"Tony Stark", "tony@stark.com"}
+  """
+  def reply_to(%__MODULE__{} = email, reply_to) do
+    reply_to = format_recipient(reply_to)
+    %{email | reply_to: reply_to}
+  end
+
+  for fun <- [:subject, :text_body, :html_body]  do
     @doc """
     Sets the #{fun}.
 
