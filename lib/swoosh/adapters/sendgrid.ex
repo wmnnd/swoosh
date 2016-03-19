@@ -13,7 +13,7 @@ defmodule Swoosh.Adapters.Sendgrid do
     headers = [{"Content-Type", "application/x-www-form-urlencoded"},
                {"User-Agent", "swoosh/#{Swoosh.version}"},
                {"Authorization", "Bearer #{config[:api_key]}"}]
-    body = prepare_body(email) |> Plug.Conn.Query.encode
+    body = email |> prepare_body() |> Plug.Conn.Query.encode
 
     case HTTPoison.post(base_url(config) <> @api_endpoint, body, headers) do
       {:ok, %Response{status_code: code}} when code >= 200 and code <= 299 ->
