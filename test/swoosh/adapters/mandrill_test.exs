@@ -48,6 +48,7 @@ defmodule Swoosh.Adapters.MandrillTest do
       |> from({"T Stark", "tony@stark.com"})
       |> to({"Steve Rogers", "steve@rogers.com"})
       |> to("wasp@avengers.com")
+      |> reply_to("office@avengers.com")
       |> cc({"Bruce Banner", "hulk@smash.com"})
       |> cc("thor@odinson.com")
       |> bcc({"Clinton Francis Barton", "hawk@eye.com"})
@@ -61,6 +62,7 @@ defmodule Swoosh.Adapters.MandrillTest do
       body_params = %{"key" => "jarvis",
                       "message" => %{
                         "subject" => "Hello, Avengers!",
+                        "headers" => %{"Reply-To" => "office@avengers.com"},
                         "to" => [%{"type" => "bcc", "email" => "beast@avengers.com"},
                                  %{"type" => "bcc", "email" => "hawk@eye.com", "name" => "Clinton Francis Barton"},
                                  %{"type" => "cc", "email" => "thor@odinson.com"},

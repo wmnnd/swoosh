@@ -44,12 +44,13 @@ defmodule Swoosh.Adapters.Mandrill do
     |> prepare_text(email)
     |> prepare_cc(email)
     |> prepare_bcc(email)
+    |> prepare_reply_to(email)
   end
 
-  def set_api_key(body, config), do: Map.put(body, :key, config[:api_key])
+  defp set_api_key(body, config), do: Map.put(body, :key, config[:api_key])
 
-  def set_async(body, %Email{provider_options: %{async: true}}), do: Map.put(body, :async, true)
-  def set_async(body, _email), do: body
+  defp set_async(body, %Email{provider_options: %{async: true}}), do: Map.put(body, :async, true)
+  defp set_async(body, _email), do: body
 
   defp prepare_from(body, %Email{from: {nil, address}}), do: Map.put(body, :from_email, address)
   defp prepare_from(body, %Email{from: {name, address}}) do
@@ -59,6 +60,11 @@ defmodule Swoosh.Adapters.Mandrill do
   end
 
   defp prepare_to(body, %Email{to: to}), do: prepare_recipients(body, to)
+
+  defp prepare_reply_to(body, %Email{reply_to: nil}), do: body
+  defp prepare_reply_to(body, %Email{reply_to: {_name, address}}) do
+    Map.put(body, :headers, %{"Reply-To" => address})
+  end
 
   defp prepare_cc(body, %Email{cc: []}), do: body
   defp prepare_cc(body, %Email{cc: cc}), do: prepare_recipients(body, cc, "cc")
