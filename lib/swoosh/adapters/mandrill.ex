@@ -48,7 +48,7 @@ defmodule Swoosh.Adapters.Mandrill do
 
   def set_api_key(body, config), do: Map.put(body, :key, config[:api_key])
 
-  def set_async(body, %Email{private: %{async: true}}), do: Map.put(body, :async, true)
+  def set_async(body, %Email{provider_options: %{async: true}}), do: Map.put(body, :async, true)
   def set_async(body, _email), do: body
 
   defp prepare_from(body, %Email{from: {nil, address}}), do: Map.put(body, :from_email, address)
