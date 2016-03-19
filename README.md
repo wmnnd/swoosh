@@ -5,8 +5,9 @@
 
 Compose, deliver and test your emails easily in Elixir.
 
-We have been applied the lesson learned from projects like Plug, Ecto or Phoenix to design clean and composable APIs,
-with clear separation of concerns between modules. A couple of services are supported out of the box, as well as SMTP.
+We have applied the lessons learned from projects like Plug, Ecto or Phoenix to design clean and composable APIs,
+with clear separation of concerns between modules.
+The most popular services are supported out of the box, as well as SMTP. And adding new ones is a piece of cake.
 
 ## Getting started
 
@@ -70,7 +71,8 @@ end
 
 ## Adapters
 
-Swoosh supports the most popular transaction email providers out of the box and also has an SMTP adapter.
+Swoosh supports the most popular transaction email providers out of the box and also has an SMTP adapter. Below is a
+list of the services we currently support:
 
 Provider   | Swoosh adapter
 :----------| :------------------------
@@ -79,7 +81,7 @@ Sendgrid   | Swoosh.Adapters.Sendgrid
 Mandrill   | Swoosh.Adapters.Mandrill
 Mailgun    | Swoosh.Adapters.Mailgun
 
-Configuring which adapter you want to use is as simple as updating your `config/config.exs` file:
+Configure which adapter you want to use by updating your `config/config.exs` file:
 
 ```elixir
 config :sample, Sample.Mailer,
@@ -87,7 +89,8 @@ config :sample, Sample.Mailer,
   # adapter config (api keys, etc.)
 ```
 
-We are looking for contributions to add support for other providers.
+Adding new adapters is super easy and we are definitely looking for contributions on that front. Get in touch if you want
+to help!
 
 ## Phoenix integration
 
@@ -113,6 +116,7 @@ Taking the example from above again, your code would look something like this:
   <h1>Welcome to Sample, <%= @username %>!</h1>
 </div>
 
+# web/emails/user_email.ex
 defmodule Sample.UserEmail do
   use Phoenix.Swoosh, view: Sample.EmailView, layout: {Sample.LayoutView, :email}
 
@@ -126,7 +130,7 @@ defmodule Sample.UserEmail do
 end
 ```
 
-Feels familiar doesn't it? Head to [phoenix_swoosh](https://github.com/swoosh/phoenix_swoosh) for more details.
+Feels familiar doesn't it? Head to the [phoenix_swoosh](https://github.com/swoosh/phoenix_swoosh) repo for more details.
 
 ## Testing
 
