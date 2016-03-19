@@ -8,8 +8,6 @@ defmodule Swoosh.Adapters.Mandrill do
   @api_endpoint "/messages/send.json"
   @headers      [{"Content-Type", "application/json"}]
 
-  def base_url(config), do: config[:base_url] || @base_url
-
   def deliver(%Email{} = email, config \\ []) do
     body = email |> prepare_body(config) |> Poison.encode!
 
@@ -28,6 +26,8 @@ defmodule Swoosh.Adapters.Mandrill do
   defp interpret_response(%{"status" => "queued"}), do: :ok
   defp interpret_response(%{"status" => "rejected"} = body), do: {:error, body}
   defp interpret_response(body), do: {:error, Poison.decode!(body)}
+
+  defp base_url(config), do: config[:base_url] || @base_url
 
   defp prepare_body(email, config) do
     %{message: prepare_message(email)}

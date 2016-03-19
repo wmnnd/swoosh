@@ -7,8 +7,6 @@ defmodule Swoosh.Adapters.Sendgrid do
   @base_url "https://api.sendgrid.com/api"
   @api_endpoint "/mail.send.json"
 
-  def base_url(config \\ []), do: config[:base_url] || @base_url
-
   def deliver(%Email{} = email, config \\ []) do
     headers = [{"Content-Type", "application/x-www-form-urlencoded"},
                {"User-Agent", "swoosh/#{Swoosh.version}"},
@@ -27,7 +25,9 @@ defmodule Swoosh.Adapters.Sendgrid do
     end
   end
 
-  def prepare_body(%Email{} = email) do
+  defp base_url(config), do: config[:base_url] || @base_url
+
+  defp prepare_body(%Email{} = email) do
     %{}
     |> prepare_from(email)
     |> prepare_to(email)
@@ -39,48 +39,46 @@ defmodule Swoosh.Adapters.Sendgrid do
     |> prepare_reply_to(email)
   end
 
-  def prepare_from(body, %Email{from: {"", address}}), do: Map.put(body, :from, address)
-  def prepare_from(body, %Email{from: {name, address}}) do
+  defp prepare_from(body, %Email{from: {"", address}}), do: Map.put(body, :from, address)
+  defp prepare_from(body, %Email{from: {name, address}}) do
     body
     |> Map.put(:from, address)
     |> Map.put(:fromname, name)
   end
 
-  def prepare_to(body, %Email{to: to}) do
+  defp prepare_to(body, %Email{to: to}) do
     {names, addresses} = Enum.unzip(to)
     body
     |> prepare_addresses(:to, addresses)
     |> prepare_names(:toname, names)
   end
 
-  def prepare_cc(body, %Email{cc: []}), do: body
-  def prepare_cc(body, %Email{cc: cc}) do
+  defp prepare_cc(body, %Email{cc: []}), do: body
+  defp prepare_cc(body, %Email{cc: cc}) do
     {names, addresses} = Enum.unzip(cc)
     body
     |> prepare_addresses(:cc, addresses)
     |> prepare_names(:ccname, names)
   end
 
-  def prepare_bcc(body, %Email{bcc: []}), do: body
-  def prepare_bcc(body, %Email{bcc: bcc}) do
+  defp prepare_bcc(body, %Email{bcc: []}), do: body
+  defp prepare_bcc(body, %Email{bcc: bcc}) do
     {names, addresses} = Enum.unzip(bcc)
     body
     |> prepare_addresses(:bcc, addresses)
     |> prepare_names(:bccname, names)
   end
 
-  def prepare_subject(body, %Email{subject: subject}), do: Map.put(body, :subject, subject)
+  defp prepare_subject(body, %Email{subject: subject}), do: Map.put(body, :subject, subject)
 
-  def prepare_html_body(body, %Email{html_body: nil}), do: body
-  def prepare_html_body(body, %Email{html_body: html_body}) do
-    Map.put(body, :html, html_body)
-  end
+  defp prepare_html_body(body, %Email{html_body: nil}), do: body
+  defp prepare_html_body(body, %Email{html_body: html_body}), do: Map.put(body, :html, html_body)
 
-  def prepare_text_body(body, %Email{text_body: nil}), do: body
-  def prepare_text_body(body, %Email{text_body: text_body}), do: Map.put(body, :text, text_body)
+  defp prepare_text_body(body, %Email{text_body: nil}), do: body
+  defp prepare_text_body(body, %Email{text_body: text_body}), do: Map.put(body, :text, text_body)
 
-  def prepare_reply_to(body, %Email{reply_to: nil}), do: body
-  def prepare_reply_to(body, %Email{reply_to: {_name, address}}), do: Map.put(body, :replyto, address)
+  defp prepare_reply_to(body, %Email{reply_to: nil}), do: body
+  defp prepare_reply_to(body, %Email{reply_to: {_name, address}}), do: Map.put(body, :replyto, address)
 
   defp prepare_addresses(body, field, addresses), do: Map.put(body, field, addresses)
   defp prepare_names(body, field, names) do

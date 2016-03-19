@@ -7,8 +7,6 @@ defmodule Swoosh.Adapters.Mailgun do
   @base_url     "https://api.mailgun.net/v3"
   @api_endpoint "/messages"
 
-  def base_url(config), do: config[:base_url] || @base_url
-
   def deliver(%Email{} = email, config \\ []) do
     headers = prepare_headers(email, config)
     params = email |> prepare_body |> Plug.Conn.Query.encode
@@ -24,6 +22,8 @@ defmodule Swoosh.Adapters.Mailgun do
         {:error, reason}
     end
   end
+
+  defp base_url(config), do: config[:base_url] || @base_url
 
   defp prepare_headers(email, config) do
     [{"User-Agent", "swoosh/#{Swoosh.version}"},

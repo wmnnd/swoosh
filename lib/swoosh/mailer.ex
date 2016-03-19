@@ -22,7 +22,7 @@ defmodule Swoosh.Mailer do
   end
 
   @doc """
-  Parses the OTP configuration for compile time.
+  Parses the OTP configuration at compile time.
   """
   def parse_config(mailer, opts) do
     otp_app = Keyword.fetch!(opts, :otp_app)
