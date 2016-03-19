@@ -10,8 +10,8 @@ defmodule Swoosh.Adapters.Mailgun do
   def base_url(config), do: config[:base_url] || @base_url
 
   def deliver(%Email{} = email, config \\ []) do
-    headers = construct_headers(email, config)
-    params = prepare_body(email) |> Plug.Conn.Query.encode
+    headers = prepare_headers(email, config)
+    params = email |> prepare_body |> Plug.Conn.Query.encode
 
     case HTTPoison.post(base_url(config) <> config[:domain] <> @api_endpoint, params, headers) do
       {:ok, %Response{status_code: code}} when code >= 200 and code <= 299 ->
@@ -25,7 +25,7 @@ defmodule Swoosh.Adapters.Mailgun do
     end
   end
 
-  defp construct_headers(email, config) do
+  defp prepare_headers(email, config) do
     [{"User-Agent", "swoosh/#{Swoosh.version}"},
      {"Authorization", "Basic #{auth(config)}"},
      {"Content-Type", content_type(email)}]

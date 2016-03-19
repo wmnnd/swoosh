@@ -5,7 +5,7 @@ defmodule Swoosh.Adapters.SMTP do
 
   def deliver(%Swoosh.Email{} = email, config) do
     {_from_name, from_address} = email.from
-    recipients = recipients(email)
+    recipients = all_recipients(email)
     {type, subtype, headers, parts} = prepare_message(email)
     body = :mimemail.encode({type, subtype, headers, [], parts})
     case :gen_smtp_client.send_blocking({from_address, recipients, body}, config) do
@@ -15,16 +15,18 @@ defmodule Swoosh.Adapters.SMTP do
     end
   end
 
-  defp recipients(email) do
-    Enum.concat([email.to, email.cc, email.bcc])
+  defp all_recipients(email) do
+    [email.to, email.cc, email.bcc]
+    |> Enum.concat()
     |> Enum.map(fn {_name, address} -> address end)
     |> Enum.uniq
   end
 
   @doc false
   def prepare_message(email) do
-    prepare_headers(email)
-    |> prepare_parts(email)
+    email
+    |> prepare_headers(email)
+    |> prepare_parts()
   end
 
   defp prepare_headers(%Email{} = email) do

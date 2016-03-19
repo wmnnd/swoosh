@@ -25,6 +25,7 @@ defmodule Swoosh.Mixfile do
     [{:httpoison, "~> 0.8"},
      {:poison, "~> 2.1"},
      {:gen_smtp, "~> 0.9.0"},
+     {:credo, "~> 0.3", only: [:dev, :test]},
      {:bypass, "~> 0.5", only: [:test]}]
   end
 

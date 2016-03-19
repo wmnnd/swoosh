@@ -11,7 +11,7 @@ defmodule Swoosh.Adapters.Mandrill do
   def base_url(config), do: config[:base_url] || @base_url
 
   def deliver(%Email{} = email, config \\ []) do
-    body = prepare_body(email, config) |> Poison.encode!
+    body = email |> prepare_body(email) |> Poison.encode!
 
     case HTTPoison.post(base_url(config) <> @api_endpoint, body, @headers) do
       {:ok, %Response{status_code: 200, body: body}} ->
@@ -23,7 +23,7 @@ defmodule Swoosh.Adapters.Mandrill do
     end
   end
 
-  defp interpret_response(body) when is_binary(body), do: Poison.decode!(body) |> hd |> interpret_response
+  defp interpret_response(body) when is_binary(body), do: body |> Poison.decode! |> hd |> interpret_response
   defp interpret_response(%{"status" => "sent"}), do: :ok
   defp interpret_response(%{"status" => "queued"}), do: :ok
   defp interpret_response(%{"status" => "rejected"} = body), do: {:error, body}
