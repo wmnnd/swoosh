@@ -49,10 +49,10 @@ defmodule Swoosh.EmailTest do
 
   test "reply_to/2" do
     email = %Email{} |> reply_to("welcome@avengers.com")
-    assert email == %Email{reply_to: "welcome@avengers.com"}
+    assert email == %Email{reply_to: {"", "welcome@avengers.com"}}
 
-    email = email |> reply_to("help@jarvis.com")
-    assert email == %Email{reply_to: "help@jarvis.com"}
+    email = email |> reply_to({"Jarvis Assist", "help@jarvis.com"})
+    assert email == %Email{reply_to: {"Jarvis Assist", "help@jarvis.com"}}
   end
 
   test "to/2 add new recipient(s) to \"to\"" do

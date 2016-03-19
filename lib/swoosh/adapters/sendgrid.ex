@@ -80,7 +80,7 @@ defmodule Swoosh.Adapters.Sendgrid do
   def prepare_text_body(body, %Email{text_body: text_body}), do: Map.put(body, :text, text_body)
 
   def prepare_reply_to(body, %Email{reply_to: nil}), do: body
-  def prepare_reply_to(body, %Email{reply_to: reply_to}), do: Map.put(body, :replyto, reply_to)
+  def prepare_reply_to(body, %Email{reply_to: {_name, address}}), do: Map.put(body, :replyto, address)
 
   defp prepare_addresses(body, field, addresses), do: Map.put(body, field, addresses)
   defp prepare_names(body, field, names) do
