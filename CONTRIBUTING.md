@@ -1,14 +1,13 @@
 # Contributing to Swoosh
 
-Thanks for thinking about contributing to Swoosh.  Please review this document first and also take a look at our
+Thanks for thinking about contributing to Swoosh. Please review this document first and also take a look at our
 [Code of Conduct](CODE_OF_CONDUCT.md), to help us keep this project inclusive to all those that may wish to contribute
 also.
-
 
 ## Opening Issues
 
 We classify bugs as any unexpected behaviour that occurs based on the code in the project, and we really appreciate it
-when users take the time to [create an issue](https://github.com/stevedomin/swoosh/issues).
+when users take the time to [create an issue](https://github.com/soosh/swoosh/issues).
 
 Please take time to add as much detail as you can to any bug reports, consider including things like the version of
 Elixir you are using, which adapter you are having trouble with and any custom config you have passed for that adapter.
@@ -16,16 +15,15 @@ Elixir you are using, which adapter you are having trouble with and any custom c
 If you are thinking about adding a feature, you should the check Issues first, someone else may have started already,
 or it might be a feature we've decided not to implement intentionally.
 
-
 ## Submitting Pull Requests
 
 Whether you're fixing a bug, or proposing a feature you'd like to see included, you can submit Pull Requests by
 following this guide:
 
-1. [Fork this repository](https://github.com/stevedomin/swoosh/fork) and then clone it locally:
+1. [Fork this repository](https://github.com/swoosh/swoosh/fork) and then clone it locally:
 
   ```bash
-  git clone https://github.com/stevedomin/swoosh
+  git clone https://github.com/swoosh/swoosh
   ```
 
 2. Create a topic branch for your changes:
