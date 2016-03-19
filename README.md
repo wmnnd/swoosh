@@ -133,11 +133,14 @@ Feels familiar doesn't it? Head to the [phoenix_swoosh](https://github.com/swoos
 
 ## Testing
 
-You can import the `Swoosh.Test` module in your tests to assert whether emails where sent or not.
+In your `config/test.exs` file set your mailer's adapter to `Swoosh.Adapters.Test` so that you can use the assertions
+provided by Swoosh in `Swoosh.TestAssertions` module.
 
 ```elixir
 defmodule Sample.UserTest do
   use ExUnit.Case, async: true
+
+  import Swoosh.TestAssertions
 
   test "send email on user signup" do
     user = create_user(%{username: "ironman", email: "tony@stark.com"})

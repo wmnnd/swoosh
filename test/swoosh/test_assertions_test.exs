@@ -1,8 +1,8 @@
-defmodule Swoosh.TestTest do
+defmodule Swoosh.TestAssertionsTest do
   use ExUnit.Case, async: true
 
   import Swoosh.Email
-  import Swoosh.Test
+  import Swoosh.TestAssertions
 
   setup do
     email =

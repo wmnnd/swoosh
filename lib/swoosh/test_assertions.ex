@@ -1,4 +1,4 @@
-defmodule Swoosh.Test do
+defmodule Swoosh.TestAssertions do
   @moduledoc """
   """
 
