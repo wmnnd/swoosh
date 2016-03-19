@@ -78,6 +78,7 @@ SMTP       | Swoosh.Adapters.SMTP
 Sendgrid   | Swoosh.Adapters.Sendgrid
 Mandrill   | Swoosh.Adapters.Mandrill
 Mailgun    | Swoosh.Adapters.Mailgun
+Postmark   | Swoosh.Adapters.Postmark
 
 Configure which adapter you want to use by updating your `config/config.exs` file:
 
