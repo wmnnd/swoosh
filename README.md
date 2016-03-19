@@ -5,9 +5,8 @@
 
 Compose, deliver and test your emails easily in Elixir.
 
-We have applied the lessons learned from projects like Plug, Ecto or Phoenix to design clean and composable APIs,
+We have applied the lessons learned from projects like Plug, Ecto and Phoenix in designing clean and composable APIs,
 with clear separation of concerns between modules.
-The most popular services are supported out of the box, as well as SMTP. And adding new ones is a piece of cake.
 
 ## Getting started
 
@@ -71,8 +70,7 @@ end
 
 ## Adapters
 
-Swoosh supports the most popular transaction email providers out of the box and also has an SMTP adapter. Below is a
-list of the services we currently support:
+Swoosh supports the most popular transactional email providers out of the box and also has an SMTP adapter. Below is a
 
 Provider   | Swoosh adapter
 :----------| :------------------------
