@@ -25,8 +25,8 @@ defmodule Swoosh.Adapters.SMTP do
   @doc false
   def prepare_message(email) do
     email
-    |> prepare_headers(email)
-    |> prepare_parts()
+    |> prepare_headers()
+    |> prepare_parts(email)
   end
 
   defp prepare_headers(%Email{} = email) do
