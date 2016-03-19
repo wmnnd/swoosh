@@ -64,7 +64,4 @@ defmodule Swoosh.TestTest do
         "(which matched {:email, _})" = error.message
     end
   end
-
-  defp flush() do
-  end
 end
