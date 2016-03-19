@@ -46,11 +46,15 @@ defmodule Swoosh.Adapters.Mailgun do
     |> prepare_text(email)
     |> prepare_cc(email)
     |> prepare_bcc(email)
+    |> prepare_reply_to(email)
   end
 
   defp prepare_from(body, %Email{from: {_name, address}}), do: Map.put(body, :from, address)
 
   defp prepare_to(body, %Email{to: to}), do: Map.put(body, :to, prepare_recipients(to))
+
+  defp prepare_reply_to(body, %Email{reply_to: nil}), do: body
+  defp prepare_reply_to(body, %Email{reply_to: {_name, address}}), do: Map.put(body, "h:Reply-To", address)
 
   defp prepare_cc(body, %Email{cc: []}), do: body
   defp prepare_cc(body, %Email{cc: cc}), do: Map.put(body, :cc, prepare_recipients(cc))

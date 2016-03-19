@@ -42,6 +42,7 @@ defmodule Swoosh.Adapters.MailgunTest do
       |> from({"T Stark", "tony@stark.com"})
       |> to({"Steve Rogers", "steve@rogers.com"})
       |> to("wasp@avengers.com")
+      |> reply_to("office@avengers.com")
       |> cc({"Bruce Banner", "hulk@smash.com"})
       |> cc("thor@odinson.com")
       |> bcc({"Clinton Francis Barton", "hawk@eye.com"})
@@ -57,6 +58,7 @@ defmodule Swoosh.Adapters.MailgunTest do
                       "to" => "wasp@avengers.com,Steve Rogers <steve@rogers.com>",
                       "bcc" => "beast@avengers.com,Clinton Francis Barton <hawk@eye.com>",
                       "cc" => "thor@odinson.com,Bruce Banner <hulk@smash.com>",
+                      "h:Reply-To" => "office@avengers.com",
                       "from" => "tony@stark.com",
                       "text" => "Hello",
                       "html" => "<h1>Hello</h1>"}
