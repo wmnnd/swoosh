@@ -18,7 +18,7 @@ config :sample, Sample.Mailer,
 
 # In your application code
 defmodule Sample.Mailer do
-  use Swoosh.Mailer, otp_app: :my_app
+  use Swoosh.Mailer, otp_app: :sample
 end
 
 defmodule Sample.UserEmail do
