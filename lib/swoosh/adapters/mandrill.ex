@@ -11,7 +11,7 @@ defmodule Swoosh.Adapters.Mandrill do
   def base_url(config), do: config[:base_url] || @base_url
 
   def deliver(%Email{} = email, config \\ []) do
-    body = email |> prepare_body(email) |> Poison.encode!
+    body = email |> prepare_body(config) |> Poison.encode!
 
     case HTTPoison.post(base_url(config) <> @api_endpoint, body, @headers) do
       {:ok, %Response{status_code: 200, body: body}} ->
