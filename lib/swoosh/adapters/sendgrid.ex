@@ -1,4 +1,22 @@
 defmodule Swoosh.Adapters.Sendgrid do
+  @moduledoc ~S"""
+  An adapter that sends email using the Sendgrid API.
+
+  For reference: [Sendgrid API docs](https://sendgrid.com/docs/API_Reference/Web_API/mail.htm://sendgrid.com/docs/API_Reference/Web_API/mail.html)
+
+  ## Example
+
+      # config/config.exs
+      config :sample, Sample.Mailer,
+	adapter: Swoosh.Adapters.Sendgrid,
+	api_key: "my-api-key"
+
+      # lib/sample/mailer.ex
+      defmodule Sample.Mailer do
+	use Swoosh.Mailer, otp_app: :sample
+      end
+  """
+
   alias HTTPoison.Response
   alias Swoosh.Email
 

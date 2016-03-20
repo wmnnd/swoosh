@@ -8,6 +8,8 @@ Compose, deliver and test your emails easily in Elixir.
 We have applied the lessons learned from projects like Plug, Ecto and Phoenix in designing clean and composable APIs,
 with clear separation of concerns between modules.
 
+The complete documentation for Swoosh is located [here](https://hexdocs.pm/swoosh).
+
 ## Getting started
 
 ```elixir

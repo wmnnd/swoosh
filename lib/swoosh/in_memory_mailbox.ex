@@ -1,5 +1,10 @@
 defmodule Swoosh.InMemoryMailbox do
-  @moduledoc """
+  @moduledoc ~S"""
+  In-memory mailbox used by the
+  [Swoosh.Adapters.Local](Swoosh.Adapters.Local.html) module.
+
+  The emails in this mailbox are stored in memory and won't persist once your
+  application is stopped.
   """
 
   use GenServer
@@ -18,24 +23,89 @@ defmodule Swoosh.InMemoryMailbox do
     GenServer.stop(__MODULE__)
   end
 
-  @doc """
+  @doc ~S"""
+  Push a new email into the mailbox.
+
+  In order to make it easy to fetch a single email, a `Message-ID` header is
+  added to the email before being stored.
+
+  ## Examples
+
+      iex> email = %Swoosh.Email{} |> from("tony@stark.com")
+      %Swoosh.Email{from: {"", "tony@stark.com"}, [...]}
+      iex> InMemoryMailbox.push(email)
+      %Swoosh.Email{from: {"", "tony@stark.com"}, headers: %{"Message-ID": "A1B2C3"}, [...]}
   """
   def push(email) do
     GenServer.call(__MODULE__, {:push, email})
   end
 
+  @doc ~S"""
+  Pop the last email from the mailbox.
+
+  ## Examples
+
+      iex> email = %Swoosh.Email{} |> from("tony@stark.com")
+      %Swoosh.Email{from: {"", "tony@stark.com"}, [...]}
+      iex> InMemoryMailbox.push(email)
+      %Swoosh.Email{from: {"", "tony@stark.com"}, headers: %{"Message-ID": "A1B2C3"}, [...]}
+      iex> InMemoryMailbox.all() |> Enum.count()
+      1
+      iex> InMemoryMailbox.pop()
+      %Swoosh.Email{from: {"", "tony@stark.com"}, headers: %{"Message-ID": "A1B2C3"}, [...]}
+      iex> InMemoryMailbox.all() |> Enun.count()
+      0
+  """
   def pop() do
     GenServer.call(__MODULE__, :pop)
   end
 
+  @doc ~S"""
+  Get a specific email from the mailbox.
+
+  ## Examples
+
+      iex> email = %Swoosh.Email{} |> from("tony@stark.com")
+      %Swoosh.Email{from: {"", "tony@stark.com"}, [...]}
+      iex> InMemoryMailbox.push(email)
+      %Swoosh.Email{from: {"", "tony@stark.com"}, headers: %{"Message-ID": "A1B2C3"}, [...]}
+      iex> InMemoryMailbox.get("A1B2C3")
+      %Swoosh.Email{from: {"", "tony@stark.com"}, headers: %{"Message-ID": "A1B2C3"}, [...]}
+  """
   def get(id) do
     GenServer.call(__MODULE__, {:get, id})
   end
 
+  @doc ~S"""
+  List all the emails in the mailbox.
+
+  ## Examples
+
+      iex> email = %Swoosh.Email{} |> from("tony@stark.com")
+      %Swoosh.Email{from: {"", "tony@stark.com"}, [...]}
+      iex> InMemoryMailbox.push(email)
+      %Swoosh.Email{from: {"", "tony@stark.com"}, headers: %{"Message-ID": "A1B2C3"}, [...]}
+      iex> InMemoryMailbox.all()
+      [%Swoosh.Email{from: {"", "tony@stark.com"}, headers: %{"Message-ID": "A1B2C3"}, [...]}]
+  """
   def all() do
     GenServer.call(__MODULE__, :all)
   end
 
+  @doc ~S"""
+  Delete all the emails currently in the mailbox.
+
+  ## Examples
+
+      iex> email = %Swoosh.Email{} |> from("tony@stark.com")
+      %Swoosh.Email{from: {"", "tony@stark.com"}, [...]}
+      iex> InMemoryMailbox.push(email)
+      %Swoosh.Email{from: {"", "tony@stark.com"}, headers: %{"Message-ID": "A1B2C3"}, [...]}
+      iex> InMemoryMailbox.delete_all()
+      :ok
+      iex> InMemoryMailbox.list()
+      []
+  """
   def delete_all() do
     GenServer.call(__MODULE__, :delete_all)
   end
@@ -67,13 +137,5 @@ defmodule Swoosh.InMemoryMailbox do
 
   def handle_call(:delete_all, _from, _state) do
     {:reply, :ok, []}
-  end
-
-  def handle_call(msg, from, state) do
-    super(msg, from, state)
-  end
-
-  def handle_cast(msg, state) do
-    super(msg, state)
   end
 end

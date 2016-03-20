@@ -1,4 +1,23 @@
 defmodule Plug.Swoosh.MailboxPreview do
+  @moduledoc """
+  Plug that serves pages useful for previewing emails in development.
+
+  It takes one option at initialization:
+
+    * `base_path` - sets the base URL path where this module is plugged. Defaults
+      to `/`.
+
+  ## Examples
+
+      # in a Phoenix router
+      defmodule Sample.Router do
+	scope "/dev" do
+	  pipe_through [:browser]
+	  forward "/mailbox", Plug.Swoosh.MailboxPreview, [base_path: "/dev/mailbox"]
+	end
+      end
+  """
+
   use Plug.Router
   use Plug.ErrorHandler
 
