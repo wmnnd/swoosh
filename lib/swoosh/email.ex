@@ -3,7 +3,7 @@ defmodule Swoosh.Email do
   Defines an Email.
 
   This module defines a `Swoosh.Email` struct and the main functions for composing an email.  As it is the contract for
-  the public APIs of `Swoosh` it is a good idea to make use of these functions rather than build the struct yourself.
+  the public APIs of Swoosh it is a good idea to make use of these functions rather than build the struct yourself.
 
   ## Email fields
 
@@ -24,14 +24,13 @@ defmodule Swoosh.Email do
 
   * `private` - a map of values that are for use by libraries/frameworks, example: `%{phoenix_template: "welcome.html.eex"}`
 
-
   ## Provider options
 
   This key allow users to make use of provider-specific functionality by passing along addition parameters.
 
-  * `provider_options` - a map of values that are specific to adapter provider, example: %{async: true}
+  * `provider_options` - a map of values that are specific to adapter provider, example: `%{async: true}`
 
-  ## Example
+  ## Examples
 
       email =
         %Swoosh.Email{}
@@ -56,16 +55,18 @@ defmodule Swoosh.Email do
   @doc """
   Sets a recipient in the `from` field.
 
-  The recipient must be either; a tuple specifying the name and address of the recipient; a string specifying the 
+  The recipient must be either; a tuple specifying the name and address of the recipient; a string specifying the
   address of the recipient.
 
-      iex> %Email{} |> from({"Steve Rogers", "steve@rogers.com"})
-      %Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: {"Steve Rogers", "steve@rogers.com"},
+  ## Examples
+
+      iex> %Swoosh.Email{} |> from({"Steve Rogers", "steve@rogers.com"})
+      %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: {"Steve Rogers", "steve@rogers.com"},
        headers: %{}, html_body: nil, private: %{}, provider_options: %{},
        reply_to: nil, subject: "", text_body: nil, to: []}
 
-      iex> %Email{} |> from("steve@rogers.com")
-      %Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: {"", "steve@rogers.com"},
+      iex> %Swoosh.Email{} |> from("steve@rogers.com")
+      %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: {"", "steve@rogers.com"},
        headers: %{}, html_body: nil, private: %{}, provider_options: %{},
        reply_to: nil, subject: "", text_body: nil, to: []}
   """
@@ -77,16 +78,18 @@ defmodule Swoosh.Email do
   @doc """
   Sets a recipient in the `reply_to` field.
 
-  The recipient must be either; a tuple specifying the name and address of the recipient; a string specifying the 
+  The recipient must be either; a tuple specifying the name and address of the recipient; a string specifying the
   address of the recipient.
 
-        iex> %Email{} |> reply_to({"Steve Rogers", "steve@rogers.com"})
-        %Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
+  ## Examples
+
+        iex> %Swoosh.Email{} |> reply_to({"Steve Rogers", "steve@rogers.com"})
+        %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
          headers: %{}, html_body: nil, private: %{}, provider_options: %{},
          reply_to: {"Steve Rogers", "steve@rogers.com"}, subject: "", text_body: nil, to: []}
 
-        iex> %Email{} |> reply_to("steve@rogers.com")
-        %Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
+        iex> %Swoosh.Email{} |> reply_to("steve@rogers.com")
+        %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
          headers: %{}, html_body: nil, private: %{}, provider_options: %{},
          reply_to: {"", "steve@rogers.com"}, subject: "", text_body: nil, to: []}
   """
@@ -100,8 +103,10 @@ defmodule Swoosh.Email do
 
   The subject must be a string that contains the subject.
 
-        iex> %Email{} |> subject("Hello")
-        %Email{assigns: %{}, attachments: nil, bcc: [],
+  ## Examples
+
+        iex> %Swoosh.Email{} |> subject("Hello, Avengers!")
+        %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
         cc: [], from: nil, headers: %{}, html_body: nil,
          private: %{}, provider_options: %{}, reply_to: nil, subject: "Hello, Avengers!",
          text_body: nil, to: []}
@@ -113,8 +118,10 @@ defmodule Swoosh.Email do
 
   The text body must be a string that containing the plaintext content.
 
-      iex> %Email{} |> text_body("Hello")
-      %Email{assigns: %{}, attachments: nil, bcc: [],
+  ## Examples
+
+      iex> %Swoosh.Email{} |> text_body("Hello")
+      %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
        cc: [], from: nil, headers: %{}, html_body: nil,
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
        text_body: "Hello", to: []}
@@ -126,63 +133,143 @@ defmodule Swoosh.Email do
 
   The HTML body must be a string that containing the HTML content.
 
-      iex> %Email{} |> html_body("<h1>Hello</h1>")
-      %Email{assigns: %{}, attachments: nil, bcc: [],
+  ## Examples
+
+      iex> %Swoosh.Email{} |> html_body("<h1>Hello</h1>")
+      %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
        cc: [], from: nil, headers: %{}, html_body: "<h1>Hello</h1>",
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
        text_body: nil, to: []}
   """
   def html_body(email, html_body), do: %{email|html_body: html_body}
 
-  for fun <- [:to, :cc, :bcc] do
-    @doc """
-    Adds new recipients in the `#{fun}` field.
+  @doc """
+  Adds new recipients in the `bcc` field.
 
-    The recipient must be; a tuple specifying the name and address of the recipient; a string specifying the 
-    address of the recipient; or an array comprised of a combination of either.
+  The recipient must be; a tuple specifying the name and address of the recipient; a string specifying the
+  address of the recipient; or an array comprised of a combination of either.
 
-          iex> %Email{} |> #{fun}("steve@rogers.com")
-          %Email{assigns: %{}, attachments: nil, bcc: [],
-           cc: [{"", "steve@rogers.com"}], from: nil, headers: %{}, html_body: nil,
-           private: %{}, provider_options: %{}, reply_to: nil, subject: "",
-           text_body: nil, to: []}
-
-    iex>
-    """
-    def unquote(fun)(%__MODULE__{unquote(fun) => existing_recipients} = email, recipients) when is_list(recipients) do
-      recipients =
-        recipients
-        |> Enum.map(&format_recipient(&1))
-        |> Enum.concat(existing_recipients)
-      %{email | unquote(fun) => recipients}
-    end
-    def unquote(fun)(%__MODULE__{} = email, recipient) do
-      unquote(fun)(email, [recipient])
-    end
-
-    @doc """
-    Puts new recipients in the `#{fun}` field.
-
-    It will replace any previously added `#{fun}` recipients.
-    """
-    def unquote(:"put_#{fun}")(%__MODULE__{} = email, recipients) when is_list(recipients) do
-      recipients =
-        recipients
-        |> Enum.map(&format_recipient(&1))
-      %{email | unquote(fun) => recipients}
-    end
-    def unquote(:"put_#{fun}")(%__MODULE__{} = email, recipient) do
-      unquote(:"put_#{fun}")(email, [recipient])
-    end
+        iex> %Swoosh.Email{} |> bcc("steve@rogers.com")
+        %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [{"", "steve@rogers.com"}],
+         cc: [], from: nil, headers: %{}, html_body: nil,
+         private: %{}, provider_options: %{}, reply_to: nil, subject: "",
+         text_body: nil, to: []}
+  """
+  def bcc(%__MODULE__{bcc: bcc} = email, recipients) when is_list(recipients) do
+    recipients =
+      recipients
+      |> Enum.map(&format_recipient(&1))
+      |> Enum.concat(bcc)
+    %{email | bcc: recipients}
+  end
+  def bcc(%__MODULE__{} = email, recipient) do
+    bcc(email, [recipient])
   end
 
   @doc """
-  Puts a new `header` in the email.
+  Puts new recipients in the `bcc` field.
+
+  It will replace any previously added `bcc` recipients.
+  """
+  def put_bcc(%__MODULE__{} = email, recipients) when is_list(recipients) do
+    recipients =
+      recipients
+      |> Enum.map(&format_recipient(&1))
+    %{email | bcc: recipients}
+  end
+  def put_bcc(%__MODULE__{} = email, recipient) do
+    put_bcc(email, [recipient])
+  end
+
+  @doc """
+  Adds new recipients in the `cc` field.
+
+  The recipient must be; a tuple specifying the name and address of the recipient; a string specifying the
+  address of the recipient; or an array comprised of a combination of either.
+
+  ## Examples
+
+        iex> %Swoosh.Email{} |> cc("steve@rogers.com")
+        %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
+         cc: [{"", "steve@rogers.com"}], from: nil, headers: %{}, html_body: nil,
+         private: %{}, provider_options: %{}, reply_to: nil, subject: "",
+         text_body: nil, to: []}
+  """
+  def cc(%__MODULE__{cc: cc} = email, recipients) when is_list(recipients) do
+    recipients =
+      recipients
+      |> Enum.map(&format_recipient(&1))
+      |> Enum.concat(cc)
+    %{email | cc: recipients}
+  end
+  def cc(%__MODULE__{} = email, recipient) do
+    cc(email, [recipient])
+  end
+
+  @doc """
+  Puts new recipients in the `cc` field.
+
+  It will replace any previously added `cc` recipients.
+  """
+  def put_cc(%__MODULE__{} = email, recipients) when is_list(recipients) do
+    recipients =
+      recipients
+      |> Enum.map(&format_recipient(&1))
+    %{email | cc: recipients}
+  end
+  def put_cc(%__MODULE__{} = email, recipient) do
+    put_cc(email, [recipient])
+  end
+
+  @doc """
+  Adds new recipients in the `to` field.
+
+  The recipient must be; a tuple specifying the name and address of the recipient; a string specifying the
+  address of the recipient; or an array comprised of a combination of either.
+
+  ## Examples
+
+        iex> %Swoosh.Email{} |> to("steve@rogers.com")
+        %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
+         cc: [], from: nil, headers: %{}, html_body: nil,
+         private: %{}, provider_options: %{}, reply_to: nil, subject: "",
+         text_body: nil, to: [{"", "steve@rogers.com"}]}
+  """
+  def to(%__MODULE__{to: to} = email, recipients) when is_list(recipients) do
+    recipients =
+      recipients
+      |> Enum.map(&format_recipient(&1))
+      |> Enum.concat(to)
+    %{email | to: recipients}
+  end
+  def to(%__MODULE__{} = email, recipient) do
+    to(email, [recipient])
+  end
+
+  @doc """
+  Puts new recipients in the `to` field.
+
+  It will replace any previously added `to` recipients.
+  """
+  def put_to(%__MODULE__{} = email, recipients) when is_list(recipients) do
+    recipients =
+      recipients
+      |> Enum.map(&format_recipient(&1))
+    %{email | to: recipients}
+  end
+  def put_to(%__MODULE__{} = email, recipient) do
+    put_to(email, [recipient])
+  end
+
+  @doc """
+  Adds a new `header` in the email.
 
   The name and value must be specified as strings.
 
-      iex> %Email{} |> header("X-Magic-Number", "7")
-      %Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
+  ## Examples
+
+      iex> %Swoosh.Email{} |> header("X-Magic-Number", "7")
+      %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
        headers: %{"X-Magic-Number" => "7"}, html_body: nil, private: %{},
        provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
   """
@@ -204,12 +291,14 @@ defmodule Swoosh.Email do
   @doc """
   Stores a new **private** key and value in the email.
 
-  This store is meant to be for libraries/framework usage.  The name should be specified as an atom, the value can be
-  any term.
+  This store is meant to be for libraries/framework usage. The name should be
+  specified as an atom, the value can be any term.
 
-      iex> %Email |> put_private(:phoenix_template, "welcome.html.eex")
-      %Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
-       headers: %{}, html_body: nil, private: %{phoenix_template: "welcome.html.eex"},
+  ## Examples
+
+      iex> %Swoosh.Email{} |> put_private(:phoenix_template, "welcome.html")
+      %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
+       headers: %{}, html_body: nil, private: %{phoenix_template: "welcome.html"},
        provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
   """
   def put_private(%__MODULE__{private: private} = email, key, value) when is_atom(key) do
@@ -219,10 +308,12 @@ defmodule Swoosh.Email do
   @doc """
   Stores a new **provider_option** key and value in the email.
 
-  This store is meant for adapter usage, to aid provider-specific functionality.  The name should be specified as an
-  atom, the value can be any term.
+  This store is meant for adapter usage, to aid provider-specific functionality.
+  The name should be specified as an atom, the value can be any term.
 
-      iex> %Email{} |> put_provider_option(:async, true)
+  ## Examples
+
+      iex> %Swoosh.Email{} |> put_provider_option(:async, true)
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
        headers: %{}, html_body: nil, private: %{}, provider_options: %{async: true},
        reply_to: nil, subject: "", text_body: nil, to: []}
@@ -243,7 +334,7 @@ defmodule Swoosh.Email do
     The recipient `#{inspect invalid}` is invalid.
 
     Recipients must be a string representing an email address like
-    `foo@bar.com` or a two element tuple `{name, address}`, where
+    `foo@bar.com` or a two-element tuple `{name, address}`, where
     name and address are strings.
     """
   end

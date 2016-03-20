@@ -1,5 +1,6 @@
 defmodule Swoosh.EmailTest do
   use ExUnit.Case, async: true
+  doctest Swoosh.Email, import: true
 
   alias Swoosh.Email
   import Swoosh.Email
@@ -232,7 +233,7 @@ defmodule Swoosh.EmailTest do
       The recipient `nil` is invalid.
 
       Recipients must be a string representing an email address like
-      `foo@bar.com` or a two elements tuple `{name, address}`, where
+      `foo@bar.com` or a two-element tuple `{name, address}`, where
       name and address are strings.
       """, fn ->
       %Email{} |> to(nil)
@@ -243,7 +244,7 @@ defmodule Swoosh.EmailTest do
       The recipient `{nil, "tony@stark.com"}` is invalid.
 
       Recipients must be a string representing an email address like
-      `foo@bar.com` or a two elements tuple `{name, address}`, where
+      `foo@bar.com` or a two-element tuple `{name, address}`, where
       name and address are strings.
       """, fn ->
       %Email{} |> to({nil, "tony@stark.com"})
@@ -254,7 +255,7 @@ defmodule Swoosh.EmailTest do
       The recipient `nil` is invalid.
 
       Recipients must be a string representing an email address like
-      `foo@bar.com` or a two elements tuple `{name, address}`, where
+      `foo@bar.com` or a two-element tuple `{name, address}`, where
       name and address are strings.
       """, fn ->
       %Email{} |> to([nil, "thor@odinson.com"])
@@ -265,7 +266,7 @@ defmodule Swoosh.EmailTest do
       The recipient `{"Bruce Banner", nil}` is invalid.
 
       Recipients must be a string representing an email address like
-      `foo@bar.com` or a two elements tuple `{name, address}`, where
+      `foo@bar.com` or a two-element tuple `{name, address}`, where
       name and address are strings.
       """, fn ->
       %Email{} |> to([{"Bruce Banner", nil}, "thor@odinson.com"])
