@@ -1,5 +1,5 @@
 defmodule Swoosh.InMemoryMailboxTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   alias Swoosh.InMemoryMailbox
 
@@ -17,6 +17,14 @@ defmodule Swoosh.InMemoryMailboxTest do
   test "push an email into the mailbox" do
     InMemoryMailbox.push(%Swoosh.Email{})
     assert InMemoryMailbox.all() |> Enum.count() == 1
+  end
+
+  test "get an email from the mailbox" do
+    InMemoryMailbox.push(%Swoosh.Email{})
+    %Swoosh.Email{headers: %{"Message-ID" => id}} = InMemoryMailbox.push(%Swoosh.Email{subject: "Hello, Avengers!"})
+    InMemoryMailbox.push(%Swoosh.Email{})
+    assert %Swoosh.Email{subject: "Hello, Avengers!"} =
+	   InMemoryMailbox.get(id)
   end
 
   test "pop an email from the mailbox" do
