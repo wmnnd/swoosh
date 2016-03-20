@@ -11,11 +11,11 @@ defmodule Swoosh.Adapters.Local do
 
       # config/config.exs
       config :sample, Sample.Mailer,
-	adapter: Swoosh.Adapters.Local
+        adapter: Swoosh.Adapters.Local
 
       # lib/sample/mailer.ex
       defmodule Sample.Mailer do
-	use Swoosh.Mailer, otp_app: :sample
+        use Swoosh.Mailer, otp_app: :sample
       end
   """
 

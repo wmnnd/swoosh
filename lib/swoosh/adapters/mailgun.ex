@@ -8,13 +8,13 @@ defmodule Swoosh.Adapters.Mailgun do
 
       # config/config.exs
       config :sample, Sample.Mailer,
-	adapter: Swoosh.Adapters.Mailgun,
-	api_key: "my-api-key",
-	domain: "avengers.com"
+        adapter: Swoosh.Adapters.Mailgun,
+        api_key: "my-api-key",
+        domain: "avengers.com"
 
       # lib/sample/mailer.ex
       defmodule Sample.Mailer do
-	use Swoosh.Mailer, otp_app: :sample
+        use Swoosh.Mailer, otp_app: :sample
       end
   """
 

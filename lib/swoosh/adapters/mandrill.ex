@@ -8,12 +8,12 @@ defmodule Swoosh.Adapters.Mandrill do
 
       # config/config.exs
       config :sample, Sample.Mailer,
-	adapter: Swoosh.Adapters.Mandrill,
-	api_key: "my-api-key"
+        adapter: Swoosh.Adapters.Mandrill,
+        api_key: "my-api-key"
 
       # lib/sample/mailer.ex
       defmodule Sample.Mailer do
-	use Swoosh.Mailer, otp_app: :sample
+        use Swoosh.Mailer, otp_app: :sample
       end
   """
 

@@ -13,14 +13,14 @@ defmodule Swoosh.Mailer do
   configuration. For example, the mailer:
 
       defmodule Sample.Mailer do
-	use Swoosh.Mailer, otp_app: :sample
+        use Swoosh.Mailer, otp_app: :sample
       end
 
   Could be configured with:
 
       config :sample, Sample.Mailer,
-	adapter: Swoosh.Adapters.Sendgrid,
-	api_key: "SG.x.x"
+        adapter: Swoosh.Adapters.Sendgrid,
+        api_key: "SG.x.x"
 
   Most of the configuration that goes into the config is specific to the adapter,
   so check the adapter's documentation for more information.

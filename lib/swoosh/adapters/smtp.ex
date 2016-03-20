@@ -9,16 +9,16 @@ defmodule Swoosh.Adapters.SMTP do
 
       # config/config.exs
       config :sample, Sample.Mailer,
-	adapter: Swoosh.Adapters.SMTP,
-	relay: "smtp.avengers.com",
-	username: "tonystark",
-	password: "ilovepepperpotts",
-	tls: :always,
-	auth: :always
+        adapter: Swoosh.Adapters.SMTP,
+        relay: "smtp.avengers.com",
+        username: "tonystark",
+        password: "ilovepepperpotts",
+        tls: :always,
+        auth: :always
 
       # lib/sample/mailer.ex
       defmodule Sample.Mailer do
-	use Swoosh.Mailer, otp_app: :sample
+        use Swoosh.Mailer, otp_app: :sample
       end
   """
 
