@@ -23,7 +23,6 @@ defmodule Swoosh.Adapters.PostmarkTest do
   test "a sent email results in :ok", %{bypass: bypass, config: config, valid_email: email} do
     Bypass.expect bypass, fn conn ->
       conn = parse(conn)
-      expected_path = "/email"
       body_params = %{"Subject" => "Hello, Avengers!",
                       "To" => "tony@stark.com",
                       "From" => "steve@rogers.com",
