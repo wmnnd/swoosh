@@ -11,10 +11,10 @@ defmodule Plug.Swoosh.MailboxPreview do
 
       # in a Phoenix router
       defmodule Sample.Router do
-	scope "/dev" do
-	  pipe_through [:browser]
-	  forward "/mailbox", Plug.Swoosh.MailboxPreview, [base_path: "/dev/mailbox"]
-	end
+        scope "/dev" do
+          pipe_through [:browser]
+          forward "/mailbox", Plug.Swoosh.MailboxPreview, [base_path: "/dev/mailbox"]
+        end
       end
   """
 
@@ -27,7 +27,7 @@ defmodule Plug.Swoosh.MailboxPreview do
   EEx.function_from_file :defp, :template, "lib/plug/templates/mailbox_viewer/index.html.eex", [:assigns]
 
   def call(conn, opts) do
-    conn = assign(conn, :base_path, opts[:base_path] || "/")
+    conn = assign(conn, :base_path, opts[:base_path] || "")
     super(conn, opts)
   end
 
@@ -60,5 +60,7 @@ defmodule Plug.Swoosh.MailboxPreview do
     send_resp(conn, conn.status, "Something went wrong")
   end
 
-  defp to_absolute_url(conn, path), do: "#{conn.assigns.base_path}/#{path}"
+  defp to_absolute_url(conn, path) do
+    URI.parse("#{conn.assigns.base_path}/#{path}").path
+  end
 end
