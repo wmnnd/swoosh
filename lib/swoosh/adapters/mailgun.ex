@@ -1,4 +1,23 @@
 defmodule Swoosh.Adapters.Mailgun do
+  @moduledoc ~S"""
+  An adapter that sends email using the Mailgun API.
+
+  For reference: [Mailgun API docs](https://documentation.mailgun.com/api-sending.html#sending)
+
+  ## Example
+
+      # config/config.exs
+      config :sample, Sample.Mailer,
+	adapter: Swoosh.Adapters.Mailgun,
+	api_key: "my-api-key",
+	domain: "avengers.com"
+
+      # lib/sample/mailer.ex
+      defmodule Sample.Mailer do
+	use Swoosh.Mailer, otp_app: :sample
+      end
+  """
+
   alias HTTPoison.Response
   alias Swoosh.Email
 

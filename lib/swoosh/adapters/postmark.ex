@@ -1,4 +1,22 @@
 defmodule Swoosh.Adapters.Postmark do
+  @moduledoc ~S"""
+  An adapter that sends email using the Postmark API.
+
+  For reference: [Postmark API docs](http://developer.postmarkapp.com/developer-send-api.html)
+
+  ## Example
+
+      # config/config.exs
+      config :sample, Sample.Mailer,
+	adapter: Swoosh.Adapters.Postmark,
+	api_key: "my-api-key"
+
+      # lib/sample/mailer.ex
+      defmodule Sample.Mailer do
+	use Swoosh.Mailer, otp_app: :sample
+      end
+  """
+
   alias HTTPoison.Response
   alias Swoosh.Email
 
@@ -6,8 +24,6 @@ defmodule Swoosh.Adapters.Postmark do
 
   @base_url     "https://api.postmarkapp.com"
   @api_endpoint "/email"
-
-  def base_url(config), do: config[:base_url] || @base_url
 
   def deliver(%Email{} = email, config \\ []) do
     headers = prepare_headers(config)
@@ -24,6 +40,8 @@ defmodule Swoosh.Adapters.Postmark do
         {:error, reason}
     end
   end
+
+  defp base_url(config), do: config[:base_url] || @base_url
 
   defp prepare_headers(config) do
     [{"User-Agent", "swoosh/#{Swoosh.version}"},
@@ -54,8 +72,8 @@ defmodule Swoosh.Adapters.Postmark do
   defp prepare_bcc(body, %Email{bcc: []}), do: body
   defp prepare_bcc(body, %Email{bcc: bcc}), do: Map.put(body, "Bcc", prepare_recipients(bcc))
 
-  def prepare_reply_to(body, %Email{reply_to: nil}), do: body
-  def prepare_reply_to(body, %Email{reply_to: {_name, address}}), do: Map.put(body, "ReplyTo", address)
+  defp prepare_reply_to(body, %Email{reply_to: nil}), do: body
+  defp prepare_reply_to(body, %Email{reply_to: {_name, address}}), do: Map.put(body, "ReplyTo", address)
 
   defp prepare_recipients(recipients) do
     recipients

@@ -1,4 +1,27 @@
 defmodule Swoosh.Adapters.SMTP do
+  @moduledoc ~S"""
+  An adapter that sends email using the SMTP protocol.
+
+  Underneath this adapter uses the
+  [gen_stmp](https://github.com/Vagabond/gen_smtp) library.
+
+  ## Example
+
+      # config/config.exs
+      config :sample, Sample.Mailer,
+	adapter: Swoosh.Adapters.SMTP,
+	relay: "smtp.avengers.com",
+	username: "tonystark",
+	password: "ilovepepperpotts",
+	tls: :always,
+	auth: :always
+
+      # lib/sample/mailer.ex
+      defmodule Sample.Mailer do
+	use Swoosh.Mailer, otp_app: :sample
+      end
+  """
+
   alias Swoosh.Email
 
   @behaviour Swoosh.Adapter

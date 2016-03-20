@@ -1,4 +1,22 @@
 defmodule Swoosh.Adapters.Mandrill do
+  @moduledoc ~S"""
+  An adapter that sends email using the Mandrill API.
+
+  For reference: [Mandrill API docs](https://mandrillapp.com/api/docs/messages.html)
+
+  ## Example
+
+      # config/config.exs
+      config :sample, Sample.Mailer,
+	adapter: Swoosh.Adapters.Mandrill,
+	api_key: "my-api-key"
+
+      # lib/sample/mailer.ex
+      defmodule Sample.Mailer do
+	use Swoosh.Mailer, otp_app: :sample
+      end
+  """
+
   alias HTTPoison.Response
   alias Swoosh.Email
 
