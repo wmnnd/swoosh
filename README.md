@@ -6,7 +6,8 @@
 Compose, deliver and test your emails easily in Elixir.
 
 We have applied the lessons learned from projects like Plug, Ecto and Phoenix in designing clean and composable APIs,
-with clear separation of concerns between modules.
+with clear separation of concerns between modules. Out of the box it comes with adapters for Sendgrid, Mandrill,
+Mailgun and Postmark, as well as SMTP.
 
 The complete documentation for Swoosh is located [here](https://hexdocs.pm/swoosh).
 
@@ -72,7 +73,8 @@ end
 
 ## Adapters
 
-Swoosh supports the most popular transactional email providers out of the box and also has an SMTP adapter. Below is a
+Swoosh supports the most popular transactional email providers out of the box and also has a SMTP adapter. Below is the
+list of the adapters currently included:
 
 Provider   | Swoosh adapter
 :----------| :------------------------
@@ -99,7 +101,7 @@ If you are looking to use Swoosh in your Phoenix project, make sure to check out
 [phoenix_swoosh](https://github.com/swoosh/phoenix_swoosh) project. It contains a set of functions that make it easy to
 render the text and HTML bodies using Phoenix views, templates and layouts.
 
-Taking the example from above again, your code would look something like this:
+Taking the example from above the "Getting Started" section, your code would look something like this:
 
 ```elixir
 # web/templates/layout/email.html.eex
