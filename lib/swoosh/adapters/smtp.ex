@@ -55,6 +55,7 @@ defmodule Swoosh.Adapters.SMTP do
   defp prepare_headers(%Email{} = email) do
     []
     |> prepare_mime_version
+    |> prepare_reply_to(email)
     |> prepare_subject(email)
     |> prepare_cc(email)
     |> prepare_to(email)
@@ -69,6 +70,9 @@ defmodule Swoosh.Adapters.SMTP do
 
   defp prepare_cc(headers, %Email{cc: []}), do: headers
   defp prepare_cc(headers, %Email{cc: cc}), do: [{"Cc", "#{prepare_recipients(cc)}"} | headers]
+
+  defp prepare_reply_to(headers, %Email{reply_to: nil}), do: headers
+  defp prepare_reply_to(headers, %Email{reply_to: reply_to}), do: [{"Reply-To", prepare_recipient(reply_to)} | headers]
 
   defp prepare_mime_version(headers), do: [{"Mime-Version", "1.0"} | headers]
 

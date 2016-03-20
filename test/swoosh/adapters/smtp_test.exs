@@ -37,6 +37,7 @@ defmodule Swoosh.Adapters.SMTPTest do
       |> cc("thor@odinson.com")
       |> bcc({"Clinton Francis Barton", "hawk@eye.com"})
       |> bcc("beast@avengers.com")
+      |> reply_to("black@widow.com")
 
     assert SMTP.prepare_message(email) ==
     {"text", "plain",
@@ -45,6 +46,7 @@ defmodule Swoosh.Adapters.SMTPTest do
         {"To", "Janet Pym <wasp@avengers.com>, steve@rogers.com"},
         {"Cc", "thor@odinson.com, Bruce Banner <hulk@smash.com>"},
         {"Subject", "Hello, Avengers!"},
+        {"Reply-To", "black@widow.com"},
         {"Mime-Version", "1.0"}],
       "Hello"}
   end
