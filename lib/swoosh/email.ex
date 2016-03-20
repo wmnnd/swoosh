@@ -288,7 +288,7 @@ defmodule Swoosh.Email do
     """
   end
 
-  @doc """
+  @doc ~S"""
   Stores a new **private** key and value in the email.
 
   This store is meant to be for libraries/framework usage. The name should be
@@ -296,35 +296,33 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> email.private[:phoenix_template]
-      nil
-      iex> email = put_private(email, :phoenix_template, "welcome.html")
-      iex> email.private[:phoenix_template]
-      "welcome.html"
+      iex> %Swoosh.Email{} |> put_private(:phoenix_template, "welcome.html")
+      %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
+       headers: %{}, html_body: nil, private: %{phoenix_template: "welcome.html"},
+       provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
   """
   def put_private(%__MODULE__{private: private} = email, key, value) when is_atom(key) do
     %{email | private: Map.put(private, key, value)}
   end
 
-  @doc """
+  @doc ~S"""
   Stores a new **provider_option** key and value in the email.
 
   This store is meant for adapter usage, to aid provider-specific functionality.
   The name should be specified as an atom, the value can be any term.
 
   ## Examples
-
-      iex> email.provider_options[:async]
-      nil
-      iex> email = put_provider_option(email, :async, true)
-      iex> email.provider_options[:async]
-      true
+      
+      iex> %Swoosh.Email{} |> put_provider_option(:async, true)
+      %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
+       headers: %{}, html_body: nil, private: %{}, provider_options: %{async: true},
+       reply_to: nil, subject: "", text_body: nil, to: []}
   """
   def put_provider_option(%__MODULE__{provider_options: provider_options} = email, key, value) when is_atom(key) do
     %{email | provider_options: Map.put(provider_options, key, value)}
   end
 
-  @doc """
+  @doc ~S"""
   Stores a new variable key and value in the email.
 
   This store is meant for variables used in templating. The name should be specified as an atom, the value can be any
@@ -332,11 +330,10 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> email.assigns[:first_name]
-      nil
-      iex> email = assign(email, :first_name, "Steve")
-      iex> email.assigns[:first_name]
-      "Steve"
+      iex> %Swoosh.Email{} |> assign(:username, "ironman")
+      %Swoosh.Email{assigns: %{username: "ironman"}, attachments: nil, bcc: [],
+       cc: [], from: nil, headers: %{}, html_body: nil, private: %{},
+       provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
   """
   def assign(%__MODULE__{assigns: assigns} = email, key, value) when is_atom(key) do
     %{email | assigns: Map.put(assigns, key, value)}
