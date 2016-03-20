@@ -50,7 +50,7 @@ defmodule Swoosh.Adapters.Mailgun do
      {"Content-Type", content_type(email)}]
   end
 
-  defp auth(config), do: Base.encode64("api: #{config[:api_key]}")
+  defp auth(config), do: Base.encode64("api:#{config[:api_key]}")
 
   defp content_type(%Email{attachments: nil}), do: "application/x-www-form-urlencoded"
   defp content_type(%Email{attachments: []}), do: "application/x-www-form-urlencoded"
