@@ -46,7 +46,7 @@ defmodule Swoosh.Mixfile do
 
   defp description do
     """
-    Compose, deliver and test your emails easily in Elixir. Supports SMTP, Sendgrid, Mandrill and Mailgun out of the box.
+    Compose, deliver and test your emails easily in Elixir. Supports SMTP, Sendgrid, Mandrill, Postmark and Mailgun out of the box.
     Works great with Phoenix.
     """
   end
