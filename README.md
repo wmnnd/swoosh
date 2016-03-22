@@ -39,7 +39,7 @@ defmodule Sample.UserEmail do
 end
 
 # In an IEx session
-Sample.UserEmail.welcome(%{name: "Tony Stark", email: "tony@stark.com"}) |> Mailer.deliver
+Sample.UserEmail.welcome(%{name: "Tony Stark", email: "tony@stark.com"}) |> Sample.Mailer.deliver
 
 # Or in a Phoenix controller
 defmodule Sample.UserController do
