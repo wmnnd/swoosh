@@ -58,19 +58,19 @@ end
 
 1. Add swoosh to your list of dependencies in `mix.exs`:
 
-      ```elixir
-      def deps do
-        [{:swoosh, "~> 0.1.0"}]
-      end
-      ```
+    ```elixir
+    def deps do
+      [{:swoosh, "~> 0.1.0"}]
+    end
+    ```
 
 2. Ensure swoosh is started before your application:
 
-      ```elixir
-      def application do
-        [applications: [:swoosh]]
-      end
-      ```
+    ```elixir
+    def application do
+      [applications: [:swoosh]]
+    end
+    ```
 
 ## Adapters
 
