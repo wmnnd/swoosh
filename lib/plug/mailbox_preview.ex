@@ -1,66 +1,68 @@
-defmodule Plug.Swoosh.MailboxPreview do
-  @moduledoc """
-  Plug that serves pages useful for previewing emails in development.
+if Code.ensure_loaded?(Plug) do
+  defmodule Plug.Swoosh.MailboxPreview do
+    @moduledoc """
+    Plug that serves pages useful for previewing emails in development.
 
-  It takes one option at initialization:
+    It takes one option at initialization:
 
-    * `base_path` - sets the base URL path where this module is plugged. Defaults
-      to `/`.
+      * `base_path` - sets the base URL path where this module is plugged. Defaults
+        to `/`.
 
-  ## Examples
+    ## Examples
 
-      # in a Phoenix router
-      defmodule Sample.Router do
-        scope "/dev" do
-          pipe_through [:browser]
-          forward "/mailbox", Plug.Swoosh.MailboxPreview, [base_path: "/dev/mailbox"]
+        # in a Phoenix router
+        defmodule Sample.Router do
+          scope "/dev" do
+            pipe_through [:browser]
+            forward "/mailbox", Plug.Swoosh.MailboxPreview, [base_path: "/dev/mailbox"]
+          end
         end
-      end
-  """
+    """
 
-  use Plug.Router
-  use Plug.ErrorHandler
+    use Plug.Router
+    use Plug.ErrorHandler
 
-  alias Swoosh.InMemoryMailbox
+    alias Swoosh.InMemoryMailbox
 
-  require EEx
-  EEx.function_from_file :defp, :template, "lib/plug/templates/mailbox_viewer/index.html.eex", [:assigns]
+    require EEx
+    EEx.function_from_file :defp, :template, "lib/plug/templates/mailbox_viewer/index.html.eex", [:assigns]
 
-  def call(conn, opts) do
-    conn = assign(conn, :base_path, opts[:base_path] || "")
-    super(conn, opts)
-  end
+    def call(conn, opts) do
+      conn = assign(conn, :base_path, opts[:base_path] || "")
+      super(conn, opts)
+    end
 
-  plug :match
-  plug :dispatch
+    plug :match
+    plug :dispatch
 
-  get "/" do
-    emails = InMemoryMailbox.all()
-    conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(200, template(emails: emails, email: nil, conn: conn))
-  end
+    get "/" do
+      emails = InMemoryMailbox.all()
+      conn
+      |> put_resp_content_type("text/html")
+      |> send_resp(200, template(emails: emails, email: nil, conn: conn))
+    end
 
-  get "/:id/html" do
-    email = InMemoryMailbox.get(id)
-    conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(200, email.html_body)
-  end
+    get "/:id/html" do
+      email = InMemoryMailbox.get(id)
+      conn
+      |> put_resp_content_type("text/html")
+      |> send_resp(200, email.html_body)
+    end
 
-  get "/:id" do
-    emails = InMemoryMailbox.all()
-    email = InMemoryMailbox.get(id)
-    conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(200, template(emails: emails, email: email, conn: conn))
-  end
+    get "/:id" do
+      emails = InMemoryMailbox.all()
+      email = InMemoryMailbox.get(id)
+      conn
+      |> put_resp_content_type("text/html")
+      |> send_resp(200, template(emails: emails, email: email, conn: conn))
+    end
 
-  defp handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack}) do
-    send_resp(conn, conn.status, "Something went wrong")
-  end
+    defp handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack}) do
+      send_resp(conn, conn.status, "Something went wrong")
+    end
 
-  defp to_absolute_url(conn, path) do
-    URI.parse("#{conn.assigns.base_path}/#{path}").path
+    defp to_absolute_url(conn, path) do
+      URI.parse("#{conn.assigns.base_path}/#{path}").path
+    end
   end
 end
