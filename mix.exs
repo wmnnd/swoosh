@@ -24,7 +24,7 @@ defmodule Swoosh.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :httpoison, :cowboy, :plug],
+    [applications: [:logger, :httpoison],
      mod: {Swoosh.Application, []}]
   end
 
