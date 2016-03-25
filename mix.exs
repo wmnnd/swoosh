@@ -33,7 +33,7 @@ defmodule Swoosh.Mixfile do
 
   defp deps do
     [{:httpoison, "~> 0.8"},
-     {:poison, "~> 2.1"},
+     {:poison, "~> 1.5 or ~> 2.0"},
      {:gen_smtp, "~> 0.9.0"},
      {:cowboy, "~> 1.0.0", optional: true},
      {:plug, "~> 1.1", optional: true},
