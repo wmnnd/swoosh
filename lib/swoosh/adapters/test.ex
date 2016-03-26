@@ -21,5 +21,6 @@ defmodule Swoosh.Adapters.Test do
 
   def deliver(email, _config) do
     send(self(), {:email, email})
+    {:ok, %{}}
   end
 end

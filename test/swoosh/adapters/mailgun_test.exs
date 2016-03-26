@@ -4,6 +4,13 @@ defmodule Swoosh.Adapters.MailgunTest do
   import Swoosh.Email
   alias Swoosh.Adapters.Mailgun
 
+  @success_response """
+    {
+      "message": "Queued. Thank you.",
+      "id": "<20111114174239.25659.5817@samples.mailgun.org>"
+    }
+  """
+
   setup_all do
     bypass = Bypass.open
     config = [base_url: "http://localhost:#{bypass.port}",
@@ -30,10 +37,11 @@ defmodule Swoosh.Adapters.MailgunTest do
       assert body_params == conn.body_params
       assert expected_path == conn.request_path
       assert "POST" == conn.method
-      Plug.Conn.resp(conn, 200, "OK")
+
+      Plug.Conn.resp(conn, 200, @success_response)
     end
 
-    assert Mailgun.deliver(email, config) == :ok
+    assert Mailgun.deliver(email, config) == {:ok, %{id: "<20111114174239.25659.5817@samples.mailgun.org>"}}
   end
 
   test "delivery/1 with all fields returns :ok", %{bypass: bypass, config: config} do
@@ -66,10 +74,10 @@ defmodule Swoosh.Adapters.MailgunTest do
       assert expected_path == conn.request_path
       assert "POST" == conn.method
 
-      Plug.Conn.resp(conn, 200, "OK")
+      Plug.Conn.resp(conn, 200, @success_response)
     end
 
-    assert Mailgun.deliver(email, config) == :ok
+    assert Mailgun.deliver(email, config) == {:ok, %{id: "<20111114174239.25659.5817@samples.mailgun.org>"}}
   end
 
   test "delivery/1 with 4xx response", %{bypass: bypass, config: config, valid_email: email} do

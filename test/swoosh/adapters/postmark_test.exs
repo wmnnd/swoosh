@@ -4,6 +4,16 @@ defmodule Swoosh.Adapters.PostmarkTest do
   import Swoosh.Email
   alias Swoosh.Adapters.Postmark
 
+  @success_response """
+    {
+      "ErrorCode": 0,
+      "Message": "OK",
+      "MessageID": "b7bc2f4a-e38e-4336-af7d-e6c392c2f817",
+      "SubmittedAt": "2010-11-26T12:01:05.1794748-05:00",
+      "To": "tony@stark.com"
+    }
+  """
+
   setup_all do
     bypass = Bypass.open
     config = [base_url: "http://localhost:#{bypass.port}",
@@ -30,10 +40,11 @@ defmodule Swoosh.Adapters.PostmarkTest do
       assert body_params == conn.body_params
       assert "/email" == conn.request_path
       assert "POST" == conn.method
-      Plug.Conn.resp(conn, 200, "OK")
+
+      Plug.Conn.resp(conn, 200, @success_response)
     end
 
-    assert Postmark.deliver(email, config) == :ok
+    assert Postmark.deliver(email, config) == {:ok, %{id: "b7bc2f4a-e38e-4336-af7d-e6c392c2f817"}}
   end
 
   test "delivery/1 with all fields returns :ok", %{bypass: bypass, config: config} do
@@ -67,10 +78,10 @@ defmodule Swoosh.Adapters.PostmarkTest do
       assert "/email" == conn.request_path
       assert "POST" == conn.method
 
-      Plug.Conn.resp(conn, 200, "OK")
+      Plug.Conn.resp(conn, 200, @success_response)
     end
 
-    assert Postmark.deliver(email, config) == :ok
+    assert Postmark.deliver(email, config) == {:ok, %{id: "b7bc2f4a-e38e-4336-af7d-e6c392c2f817"}}
   end
 
   test "delivery/1 with 4xx response", %{bypass: bypass, config: config, valid_email: email} do

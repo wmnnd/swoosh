@@ -30,8 +30,8 @@ defmodule Swoosh.Adapters.Postmark do
     params = email |> prepare_body |> Poison.encode!
 
     case HTTPoison.post(base_url(config) <> @api_endpoint, params, headers) do
-      {:ok, %Response{status_code: 200}} ->
-        :ok
+      {:ok, %Response{status_code: 200, body: body}} ->
+        {:ok, %{id: Poison.decode!(body)["MessageID"]}}
       {:ok, %Response{status_code: code, body: body}} when code >= 400 and code <= 499 ->
         {:error, Poison.decode!(body)}
       {:ok, %Response{status_code: code, body: body}} when code >= 500 and code <= 599 ->

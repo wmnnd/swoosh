@@ -6,13 +6,13 @@ defmodule Swoosh.Adapters.LocalTest do
   end
 
   test "deliver/1" do
-    email = LocalMailer.deliver(%Swoosh.Email{
+    {status, _} = LocalMailer.deliver(%Swoosh.Email{
       from: "tony@stark.com",
       to: "steve@rogers.com",
       subject: "Hello, Avengers!",
       text_body: "Hello!"
     })
 
-    assert email == Swoosh.InMemoryMailbox.pop()
+    assert status == :ok
   end
 end
