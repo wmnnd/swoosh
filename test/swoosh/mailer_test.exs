@@ -1,10 +1,25 @@
 defmodule Swoosh.MailerTest do
   use ExUnit.Case, async: true
 
-  alias Swoosh.Mailer
+  Application.put_env(:swoosh, Swoosh.MailerTest.FakeMailer,
+    api_key: "api-key",
+    domain: "avengers.com")
+
+  defmodule FakeAdapter do
+    def deliver(email, config), do: {email, config}
+  end
 
   defmodule FakeMailer do
-    use Swoosh.Mailer, otp_app: :swoosh, adapter: Swoosh.TestAdapter
+    use Swoosh.Mailer, otp_app: :swoosh, adapter: FakeAdapter
+  end
+
+  setup_all do
+    valid_email = %Swoosh.Email{from: {"", "tony@stark.com"},
+                                to: [{"", "steve@rogers.com"}],
+                                subject: "Hello, Avengers!",
+                                html_body: "<h1>Hello</h1>",
+                                text_body: "Hello"}
+    {:ok, valid_email: valid_email}
   end
 
   test "should raise if no adapter is specified" do
@@ -21,13 +36,7 @@ defmodule Swoosh.MailerTest do
     end
   end
 
-  test "should raise if deliver/1 is called with invalid email" do
-    valid_email = %Swoosh.Email{from: "tony@stark.com",
-                                to: "steve@rogers.com",
-                                subject: "Test Email",
-                                html_body: "<h1>Hello</h1>",
-                                text_body: "Hello"}
-
+  test "should raise if deliver/1 is called with invalid email", %{valid_email: valid_email} do
     assert_raise ArgumentError, "expected \"from\" to be set", fn ->
       Map.put(valid_email, :from, nil) |> FakeMailer.deliver()
     end
@@ -54,19 +63,29 @@ defmodule Swoosh.MailerTest do
     end
   end
 
-  test "config from environment variables" do
+  test "config from environment variables", %{valid_email: email} do
     System.put_env("SMTP_USERNAME", "userenv")
     System.put_env("SMTP_PASSWORD", "passwordenv")
 
-    config = [username: {:system, "SMTP_USERNAME"},
-              password: {:system, "SMTP_PASSWORD"},
-              relay: "smtp.sendgrid.net",
-              tls: :always]
-
-    assert Mailer.parse_runtime_config(config) ==
-      [username: "userenv",
-       password: "passwordenv",
+    Application.put_env(:swoosh, Swoosh.MailerTest.EnvMailer,
+      [username: {:system, "SMTP_USERNAME"},
+       password: {:system, "SMTP_PASSWORD"},
        relay: "smtp.sendgrid.net",
-       tls: :always]
+       tls: :always])
+
+    defmodule EnvMailer do
+      use Swoosh.Mailer, otp_app: :swoosh, adapter: FakeAdapter
+    end
+
+    assert EnvMailer.deliver(email) ==
+      {email, [username: "userenv",
+               password: "passwordenv",
+               relay: "smtp.sendgrid.net",
+               tls: :always]}
+  end
+
+  test "merge config passed to deliver/2 into Mailer's config", %{valid_email: email} do
+    assert FakeMailer.deliver(email, domain: "jarvis.com") ==
+      {email, [api_key: "api-key", domain: "jarvis.com"]}
   end
 end
