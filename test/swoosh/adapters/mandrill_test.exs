@@ -4,6 +4,28 @@ defmodule Swoosh.Adapters.MandrillTest do
   import Swoosh.Email
   alias Swoosh.Adapters.Mandrill
 
+  @success_response """
+    [
+      {
+        "email": "steve@rogers.com",
+        "status": "sent",
+        "_id": "9",
+        "reject_reason" :null
+      }
+    ]
+  """
+
+  @queued_response """
+    [
+      {
+        "email": "steve@rogers.com",
+        "status": "queued",
+        "_id": "9",
+        "reject_reason": null
+      }
+    ]
+  """
+
   setup_all do
     bypass = Bypass.open
     config = [base_url: "http://localhost:#{bypass.port}",
@@ -35,11 +57,10 @@ defmodule Swoosh.Adapters.MandrillTest do
       assert "/messages/send.json" == conn.request_path
       assert "POST" == conn.method
 
-      response = "[{\"email\":\"steve@rogers.com\",\"status\":\"sent\",\"_id\":\"9\",\"reject_reason\":null}]"
-      Plug.Conn.resp(conn, 200, response)
+      Plug.Conn.resp(conn, 200, @success_response)
     end
 
-    assert Mandrill.deliver(email, config) == :ok
+    assert Mandrill.deliver(email, config) == {:ok, %{id: "9"}}
   end
 
   test "delivery/1 with all fields returns :ok", %{bypass: bypass, config: config} do
@@ -77,11 +98,10 @@ defmodule Swoosh.Adapters.MandrillTest do
       assert "/messages/send.json" == conn.request_path
       assert "POST" == conn.method
 
-      response = "[{\"email\":\"steve@rogers.com\",\"status\":\"sent\",\"_id\":\"9\",\"reject_reason\":null}]"
-      Plug.Conn.resp(conn, 200, response)
+      Plug.Conn.resp(conn, 200, @success_response)
     end
 
-    assert Mandrill.deliver(email, config) == :ok
+    assert Mandrill.deliver(email, config) == {:ok, %{id: "9"}}
   end
 
   test "a queued email results in :ok", %{bypass: bypass, config: config, valid_email: email} do
@@ -90,11 +110,11 @@ defmodule Swoosh.Adapters.MandrillTest do
       conn = parse(conn)
       assert true == conn.body_params["async"]
       assert "POST" == conn.method
-      Plug.Conn.resp(conn, 200,
-                    "[{\"email\":\"steve@rogers.com\",\"status\":\"queued\",\"_id\":\"968791b9f084486f9f65a4a6f93474ad\",\"reject_reason\":null}]")
+
+      Plug.Conn.resp(conn, 200, @queued_response)
     end
 
-    assert Mandrill.deliver(email, config) == :ok
+    assert Mandrill.deliver(email, config) == {:ok, %{id: "9"}}
   end
 
   test "deliver/1 with 2xx response containing errors", %{bypass: bypass, config: config, valid_email: email} do

@@ -22,6 +22,8 @@ defmodule Swoosh.Adapters.Local do
   @behaviour Swoosh.Adapter
 
   def deliver(%Swoosh.Email{} = email, _config) do
-    Swoosh.InMemoryMailbox.push(email)
+    %Swoosh.Email{headers: %{"Message-ID" => id}} = Swoosh.InMemoryMailbox.push(email)
+
+    {:ok, %{id: id}}
   end
 end

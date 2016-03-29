@@ -40,8 +40,8 @@ defmodule Swoosh.Adapters.Mandrill do
   end
 
   defp interpret_response(body) when is_binary(body), do: body |> Poison.decode! |> hd |> interpret_response
-  defp interpret_response(%{"status" => "sent"}), do: :ok
-  defp interpret_response(%{"status" => "queued"}), do: :ok
+  defp interpret_response(%{"status" => "sent"} = body), do: {:ok, %{id: body["_id"]}}
+  defp interpret_response(%{"status" => "queued"} = body), do: {:ok, %{id: body["_id"]}}
   defp interpret_response(%{"status" => "rejected"} = body), do: {:error, body}
   defp interpret_response(body), do: {:error, Poison.decode!(body)}
 
