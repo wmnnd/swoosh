@@ -1,6 +1,8 @@
 defmodule Swoosh.MailerTest do
   use ExUnit.Case, async: true
 
+  alias Swoosh.Mailer
+
   defmodule FakeMailer do
     use Swoosh.Mailer, otp_app: :swoosh, adapter: Swoosh.TestAdapter
   end
@@ -52,4 +54,19 @@ defmodule Swoosh.MailerTest do
     end
   end
 
+  test "config from environment variables" do
+    System.put_env("SMTP_USERNAME", "userenv")
+    System.put_env("SMTP_PASSWORD", "passwordenv")
+
+    config = [username: {:system, "SMTP_USERNAME"},
+              password: {:system, "SMTP_PASSWORD"},
+              relay: "smtp.sendgrid.net",
+              tls: :always]
+
+    assert Mailer.parse_runtime_config(config) ==
+      [username: "userenv",
+       password: "passwordenv",
+       relay: "smtp.sendgrid.net",
+       tls: :always]
+  end
 end
