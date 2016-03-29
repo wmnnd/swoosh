@@ -25,6 +25,17 @@ defmodule Swoosh.Mailer do
   Most of the configuration that goes into the config is specific to the adapter,
   so check the adapter's documentation for more information.
 
+  Note that the configuration is set into your mailer at compile time. If you
+  need to reference config at runtime you can use a tuple like
+  `{:system, "ENV_VAR"}`.
+
+      config :sample, Sample.Mailer,
+        adapter: Swoosh.Adapters.SMTP,
+        relay: "smtp.sendgrid.net"
+        username: {:system, "SMTP_USERNAME"},
+        password: {:system, "SMTP_PASSWORD"},
+        tls: :always
+
   ## Examples
 
   Once configured you can use your mailer like this:
@@ -53,7 +64,10 @@ defmodule Swoosh.Mailer do
       def deliver(%Swoosh.Email{html_body: nil, text_body: nil}) do
         raise ArgumentError, "expected \"html_body\" or \"text_body\" to be set"
       end
-      def deliver(%Swoosh.Email{} = email), do: @adapter.deliver(email, @config)
+      def deliver(%Swoosh.Email{} = email) do
+        email
+        |> @adapter.deliver(Swoosh.Mailer.parse_runtime_config(@config))
+      end
       def deliver(email), do: raise ArgumentError, "expected %Swoosh.Email{}, got #{inspect email}"
     end
   end
@@ -72,5 +86,18 @@ defmodule Swoosh.Mailer do
     end
 
     {otp_app, adapter, config}
+  end
+
+  @doc """
+  Parses the OTP configuration at run time.
+
+  This function will transform all the {:system, "ENV_VAR"} tuples into their
+  respective values grabbed from the process environment.
+  """
+  def parse_runtime_config(config) do
+    Enum.map config, fn
+      {key, {:system, env_var}} -> {key, System.get_env(env_var)}
+      {key, value} -> {key, value}
+    end
   end
 end
