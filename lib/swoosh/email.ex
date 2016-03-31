@@ -52,6 +52,26 @@ defmodule Swoosh.Email do
             html_body: nil, attachments: nil, reply_to: nil, headers: %{},
             private: %{}, assigns: %{}, provider_options: %{}
 
+  @type name :: String.t
+  @type address :: String.t
+  @type mailbox :: {name, address}
+  @type subject :: String.t
+  @type text_body :: String.t
+  @type html_body :: String.t
+
+  @type t :: %__MODULE__{subject: String.t,
+                         from: mailbox | nil,
+                         to: [mailbox],
+                         cc: [mailbox] | [],
+                         bcc: [mailbox] | [],
+                         text_body: text_body | nil,
+                         html_body: html_body | nil,
+                         reply_to: mailbox | nil,
+                         headers: map,
+                         private: map,
+                         assigns: map,
+                         provider_options: map}
+
   @doc """
   Sets a recipient in the `from` field.
 
@@ -70,6 +90,7 @@ defmodule Swoosh.Email do
        headers: %{}, html_body: nil, private: %{}, provider_options: %{},
        reply_to: nil, subject: "", text_body: nil, to: []}
   """
+  @spec from(t, mailbox | address) :: t
   def from(%__MODULE__{} = email, from) do
     from = format_recipient(from)
     %{email | from: from}
@@ -93,6 +114,7 @@ defmodule Swoosh.Email do
        headers: %{}, html_body: nil, private: %{}, provider_options: %{},
        reply_to: {"", "steve@rogers.com"}, subject: "", text_body: nil, to: []}
   """
+  @spec reply_to(t, mailbox | address) :: t
   def reply_to(%__MODULE__{} = email, reply_to) do
     reply_to = format_recipient(reply_to)
     %{email | reply_to: reply_to}
@@ -111,6 +133,7 @@ defmodule Swoosh.Email do
        private: %{}, provider_options: %{}, reply_to: nil, subject: "Hello, Avengers!",
        text_body: nil, to: []}
   """
+  @spec subject(t, subject) :: t
   def subject(email, subject), do: %{email|subject: subject}
 
   @doc """
@@ -126,6 +149,7 @@ defmodule Swoosh.Email do
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
        text_body: "Hello", to: []}
   """
+  @spec text_body(t, text_body | nil) :: t
   def text_body(email, text_body), do: %{email|text_body: text_body}
 
   @doc """
@@ -141,6 +165,7 @@ defmodule Swoosh.Email do
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
        text_body: nil, to: []}
   """
+  @spec html_body(t, html_body | nil) :: t
   def html_body(email, html_body), do: %{email|html_body: html_body}
 
   @doc """
@@ -155,6 +180,7 @@ defmodule Swoosh.Email do
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
        text_body: nil, to: []}
   """
+  @spec bcc(t, mailbox | address | [mailbox|address]) :: t
   def bcc(%__MODULE__{bcc: bcc} = email, recipients) when is_list(recipients) do
     recipients =
       recipients
@@ -171,6 +197,7 @@ defmodule Swoosh.Email do
 
   It will replace any previously added `bcc` recipients.
   """
+  @spec put_bcc(t, mailbox | address | [mailbox|address]) :: t
   def put_bcc(%__MODULE__{} = email, recipients) when is_list(recipients) do
     recipients =
       recipients
@@ -195,6 +222,7 @@ defmodule Swoosh.Email do
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
        text_body: nil, to: []}
   """
+  @spec cc(t, mailbox | address | [mailbox|address]) :: t
   def cc(%__MODULE__{cc: cc} = email, recipients) when is_list(recipients) do
     recipients =
       recipients
@@ -211,6 +239,7 @@ defmodule Swoosh.Email do
 
   It will replace any previously added `cc` recipients.
   """
+  @spec put_cc(t, mailbox | address | [mailbox|address]) :: t
   def put_cc(%__MODULE__{} = email, recipients) when is_list(recipients) do
     recipients =
       recipients
@@ -235,6 +264,7 @@ defmodule Swoosh.Email do
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
        text_body: nil, to: [{"", "steve@rogers.com"}]}
   """
+  @spec to(t, mailbox | address | [mailbox|address]) :: t
   def to(%__MODULE__{to: to} = email, recipients) when is_list(recipients) do
     recipients =
       recipients
@@ -251,6 +281,7 @@ defmodule Swoosh.Email do
 
   It will replace any previously added `to` recipients.
   """
+  @spec put_to(t, mailbox | address | [mailbox|address]) :: t
   def put_to(%__MODULE__{} = email, recipients) when is_list(recipients) do
     recipients =
       recipients
@@ -273,6 +304,7 @@ defmodule Swoosh.Email do
        headers: %{"X-Magic-Number" => "7"}, html_body: nil, private: %{},
        provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
   """
+  @spec header(t, String.t, String.t) :: t
   def header(%__MODULE__{headers: headers} = email, name, value) when is_binary(name) and is_binary(value) do
     headers = headers |> Map.put(name, value)
     Map.put(email, :headers, headers)
@@ -301,6 +333,7 @@ defmodule Swoosh.Email do
        headers: %{}, html_body: nil, private: %{phoenix_template: "welcome.html"},
        provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
   """
+  @spec put_private(t, atom, any) :: t
   def put_private(%__MODULE__{private: private} = email, key, value) when is_atom(key) do
     %{email | private: Map.put(private, key, value)}
   end
@@ -312,12 +345,13 @@ defmodule Swoosh.Email do
   The name should be specified as an atom, the value can be any term.
 
   ## Examples
-      
+
       iex> %Swoosh.Email{} |> put_provider_option(:async, true)
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
        headers: %{}, html_body: nil, private: %{}, provider_options: %{async: true},
        reply_to: nil, subject: "", text_body: nil, to: []}
   """
+  @spec put_provider_option(t, atom, any) :: t
   def put_provider_option(%__MODULE__{provider_options: provider_options} = email, key, value) when is_atom(key) do
     %{email | provider_options: Map.put(provider_options, key, value)}
   end
@@ -335,6 +369,7 @@ defmodule Swoosh.Email do
        cc: [], from: nil, headers: %{}, html_body: nil, private: %{},
        provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
   """
+  @spec assign(t, atom, any) :: t
   def assign(%__MODULE__{assigns: assigns} = email, key, value) when is_atom(key) do
     %{email | assigns: Map.put(assigns, key, value)}
   end
