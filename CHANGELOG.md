@@ -1,5 +1,9 @@
 ## Changelog
 
+## v0.3.0-dev
+### Added
+* Add `Swoosh.Email.new/1` function to create `Swoosh.Email{}` struct.
+
 ## [v0.2.0] - 2016-03-31
 ### Added
 * Add support for runtime configuration using {:system, "ENV_VAR"} tuples
