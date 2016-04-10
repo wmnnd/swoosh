@@ -14,7 +14,7 @@ defmodule Swoosh.Adapters.MailgunTest do
   setup_all do
     bypass = Bypass.open
     config = [base_url: "http://localhost:#{bypass.port}",
-              domain: "/avengers.com"]
+              domain: "avengers.com"]
 
     valid_email =
       new
@@ -29,7 +29,7 @@ defmodule Swoosh.Adapters.MailgunTest do
   test "a sent email results in :ok", %{bypass: bypass, config: config, valid_email: email} do
     Bypass.expect bypass, fn conn ->
       conn = parse(conn)
-      expected_path = config[:domain] <> "/messages"
+      expected_path = "/" <> config[:domain] <> "/messages"
       body_params = %{"subject" => "Hello, Avengers!",
                       "to" => "steve@rogers.com",
                       "from" => "tony@stark.com",
@@ -61,7 +61,7 @@ defmodule Swoosh.Adapters.MailgunTest do
 
     Bypass.expect bypass, fn conn ->
       conn = parse(conn)
-      expected_path = config[:domain] <> "/messages"
+      expected_path = "/" <> config[:domain] <> "/messages"
       body_params = %{"subject" => "Hello, Avengers!",
                       "to" => "wasp@avengers.com,Steve Rogers <steve@rogers.com>",
                       "bcc" => "beast@avengers.com,Clinton Francis Barton <hawk@eye.com>",
