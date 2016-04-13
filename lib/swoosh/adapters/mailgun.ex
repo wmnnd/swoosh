@@ -68,7 +68,7 @@ defmodule Swoosh.Adapters.Mailgun do
     |> prepare_reply_to(email)
   end
 
-  defp prepare_from(body, %Email{from: {_name, address}}), do: Map.put(body, :from, address)
+  defp prepare_from(body, %Email{from: from}), do: Map.put(body, :from, prepare_recipient(from))
 
   defp prepare_to(body, %Email{to: to}), do: Map.put(body, :to, prepare_recipients(to))
 

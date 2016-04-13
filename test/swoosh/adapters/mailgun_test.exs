@@ -67,7 +67,7 @@ defmodule Swoosh.Adapters.MailgunTest do
                       "bcc" => "beast@avengers.com,Clinton Francis Barton <hawk@eye.com>",
                       "cc" => "thor@odinson.com,Bruce Banner <hulk@smash.com>",
                       "h:Reply-To" => "office@avengers.com",
-                      "from" => "tony@stark.com",
+                      "from" => "T Stark <tony@stark.com>",
                       "text" => "Hello",
                       "html" => "<h1>Hello</h1>"}
       assert body_params == conn.body_params
