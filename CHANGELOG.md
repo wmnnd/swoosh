@@ -3,6 +3,14 @@
 ## v0.3.0-dev
 ### Added
 * Add `Swoosh.Email.new/1` function to create `Swoosh.Email{}` struct.
+* `Swoosh.TestAssertions.assert_email_sent/1` now supports asserting on specific email params.
+
+### Changed
+* Remove the need for `/` when setting the Mailgun adapter domain config.
+
+### Fixed
+* Use the sender's name in the `From` header with the Mailgun adapter.
+* Send custom headers set in `%Swoosh.Email{}.headers` when using the SMTP adapter.
 
 ## [v0.2.0] - 2016-03-31
 ### Added
