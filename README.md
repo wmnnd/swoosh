@@ -148,8 +148,9 @@ defmodule Sample.UserTest do
   import Swoosh.TestAssertions
 
   test "send email on user signup" do
+    # Assuming `create_user` creates a new user then sends out a `Sample.UserEmail.welcome` email
     user = create_user(%{username: "ironman", email: "tony@stark.com"})
-    assert_email_sent %Swoosh.Email{to: "tony@stark.com", subject: "Hello, ironman!"}
+    assert_email_sent Sample.UserEmail.welcome(user)
   end
 end
 ```
