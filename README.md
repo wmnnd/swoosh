@@ -129,7 +129,7 @@ defmodule Sample.UserEmail do
     |> to({user.name, user.email})
     |> from({"Dr B Banner", "hulk@smash.com"})
     |> subject("Hello, Avengers!")
-    |> template_body("welcome.html", %{username: user.username})
+    |> render_body("welcome.html", %{username: user.username})
   end
 end
 ```
