@@ -1,5 +1,14 @@
 ## Changelog
 
+## v0.4.0-dev
+### Added
+* Sendmail adapter.
+* DKIM support for the SMTP and Sendmail adapter.
+* Basic integration testing. We are now making real calls to the various providers' API (except Mandrill).
+
+### Fixed
+* `Plug.Swoosh.MailboxPreview` now shows the actual port it's binding on.
+
 ## v0.3.0 - 2016-04-20
 ### Added
 * Add `Swoosh.Email.new/1` function to create `Swoosh.Email{}` struct.
@@ -16,11 +25,11 @@
 
 ## [v0.2.0] - 2016-03-31
 ### Added
-* Add support for runtime configuration using {:system, "ENV_VAR"} tuples
+* Add support for runtime configuration using `{:system, "ENV_VAR"}` tuples
 * Add support for passing config as an argument to deliver/2
 
 ### Changed
-* Adapters have consistent successful return value ({:ok, term})
+* Adapters have consistent successful return value (`{:ok, term}`)
 * Only compile `Plug.Swoosh.MailboxPreview` if `Plug` is loaded
 * Relax Poison version requirement (`~> 1.5 or ~> 2.0`)
 
