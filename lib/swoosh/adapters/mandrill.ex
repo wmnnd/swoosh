@@ -26,6 +26,8 @@ defmodule Swoosh.Adapters.Mandrill do
   @api_endpoint "/messages/send.json"
   @headers      [{"Content-Type", "application/json"}]
 
+  def validate_config(_config), do: {:ok}
+
   def deliver(%Email{} = email, config \\ []) do
     body = email |> prepare_body(config) |> Poison.encode!
 

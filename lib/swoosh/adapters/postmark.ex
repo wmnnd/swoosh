@@ -25,6 +25,8 @@ defmodule Swoosh.Adapters.Postmark do
   @base_url     "https://api.postmarkapp.com"
   @api_endpoint "/email"
 
+  def validate_config(_config), do: {:ok}
+
   def deliver(%Email{} = email, config \\ []) do
     headers = prepare_headers(config)
     params = email |> prepare_body |> Poison.encode!

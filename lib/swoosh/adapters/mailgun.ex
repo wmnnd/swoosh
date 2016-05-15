@@ -26,6 +26,16 @@ defmodule Swoosh.Adapters.Mailgun do
   @base_url     "https://api.mailgun.net/v3"
   @api_endpoint "/messages"
 
+  def validate_config(config) do
+    config_keys = Keyword.keys(config) |> Enum.sort
+    case config_keys do
+      [:api_key, :base_url, :domain] -> {:ok}
+      [:api_key, :domain] -> {:ok}
+      [:api_key] -> {:error, "Missing :domain from Mailgun config"}
+      [:domain] -> {:error, "Missing :api_key from Mailgun config"}
+    end
+  end
+
   def deliver(%Email{} = email, config \\ []) do
     headers = prepare_headers(email, config)
     params = email |> prepare_body |> Plug.Conn.Query.encode

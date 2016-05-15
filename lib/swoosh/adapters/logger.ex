@@ -26,6 +26,8 @@ defmodule Swoosh.Adapters.Logger do
 
   @behaviour Swoosh.Adapter
 
+  def validate_config(_config), do: {:ok}
+
   def deliver(%Swoosh.Email{} = email, config) do
     rendered_email = render(config[:log_full_email] || false, email)
     Logger.log(config[:level] || :info, rendered_email)

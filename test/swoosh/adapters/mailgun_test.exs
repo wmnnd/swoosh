@@ -14,6 +14,7 @@ defmodule Swoosh.Adapters.MailgunTest do
   setup_all do
     bypass = Bypass.open
     config = [base_url: "http://localhost:#{bypass.port}",
+              api_key: "fake",
               domain: "avengers.com"]
 
     valid_email =
@@ -94,5 +95,9 @@ defmodule Swoosh.Adapters.MailgunTest do
     end
 
     assert Mailgun.deliver(email, config) == {:error, %{"errors" => ["The provided authorization grant is invalid, expired, or revoked"], "message" => "error"}}
+  end
+
+  test "validate_config/1", %{config: config} do
+    assert Mailgun.validate_config(config) == {:ok}
   end
 end

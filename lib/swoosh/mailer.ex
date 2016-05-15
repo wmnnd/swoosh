@@ -89,7 +89,11 @@ defmodule Swoosh.Mailer do
           @config
           |> Keyword.merge(config)
           |> Swoosh.Mailer.parse_runtime_config()
-        @adapter.deliver(email, config)
+
+        case @adapter.validate_config(config) do
+          {:ok} -> @adapter.deliver(email, config)
+          {:error, message} -> {:error, message}
+        end
       end
       def deliver(email, _config) do
         raise ArgumentError, "expected %Swoosh.Email{}, got #{inspect email}"
@@ -126,3 +130,4 @@ defmodule Swoosh.Mailer do
     end
   end
 end
+
