@@ -6,6 +6,7 @@ defmodule Swoosh.MailerTest do
     domain: "avengers.com")
 
   defmodule FakeAdapter do
+    def validate_config(_config), do: {:ok}
     def deliver(email, config), do: {email, config}
   end
 
@@ -87,5 +88,18 @@ defmodule Swoosh.MailerTest do
   test "merge config passed to deliver/2 into Mailer's config", %{valid_email: email} do
     assert FakeMailer.deliver(email, domain: "jarvis.com") ==
       {email, [api_key: "api-key", domain: "jarvis.com"]}
+  end
+
+  test "validate config passed to deliver/2", %{valid_email: email} do
+    defmodule NoConfigAdapter do
+      def deliver(_email, _config), do: :nothing
+      def validate_config(_config), do: {:error, "Missing"}
+    end
+
+    defmodule NoConfigMailer do
+      use Swoosh.Mailer, otp_app: :swoosh, adapter: NoConfigAdapter
+    end
+
+    assert NoConfigMailer.deliver(email, domain: "jarvis.com") == {:error, "Missing"}
   end
 end

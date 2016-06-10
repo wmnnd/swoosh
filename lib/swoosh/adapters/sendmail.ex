@@ -22,6 +22,8 @@ defmodule Swoosh.Adapters.Sendmail do
 
   @behaviour Swoosh.Adapter
 
+  def validate_config(_config), do: {:ok}
+
   def deliver(%Email{} = email, config) do
     body = SMTP.encode_message(email, config)
     port = Port.open({:spawn, cmd(email, config)}, [:binary])

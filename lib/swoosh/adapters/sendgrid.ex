@@ -25,6 +25,8 @@ defmodule Swoosh.Adapters.Sendgrid do
   @base_url "https://api.sendgrid.com/api"
   @api_endpoint "/mail.send.json"
 
+  def validate_config(_config), do: {:ok}
+
   def deliver(%Email{} = email, config \\ []) do
     headers = [{"Content-Type", "application/x-www-form-urlencoded"},
                {"User-Agent", "swoosh/#{Swoosh.version}"},
