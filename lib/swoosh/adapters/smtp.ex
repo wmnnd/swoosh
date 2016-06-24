@@ -6,6 +6,10 @@ defmodule Swoosh.Adapters.SMTP do
   [gen_stmp](https://github.com/Vagabond/gen_smtp) library.
 
   ## Example
+      # mix.exs
+      def application do
+        [applications: [:swoosh, :gen_stmp]]
+      end
 
       # config/config.exs
       config :sample, Sample.Mailer,

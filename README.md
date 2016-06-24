@@ -71,6 +71,13 @@ end
       [applications: [:swoosh]]
     end
     ```
+3. (Optional) If you are using the `Swoosh.Adapters.SMTP`, you also need to add gen_stmp to your list of applications:
+
+    ```elixir
+    def application do
+      [applications: [:swoosh, :gen_stmp]]
+    end
+    ```
 
 ## Adapters
 
