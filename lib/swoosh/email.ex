@@ -86,9 +86,6 @@ defmodule Swoosh.Email do
   fields that it doesn't know about.
 
   ## Examples
-      iex> import Swoosh.Email
-      Swoosh.Email
-
       iex> new
       %Swoosh.Email{}
 
