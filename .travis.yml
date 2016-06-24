@@ -2,8 +2,10 @@ language: elixir
 sudo: false
 elixir:
   - 1.2
+  - 1.3
 otp_release:
   - 18.2
+  - 19.0
 script: mix test.ci
 after_script:
   - mix deps.get --only docs
