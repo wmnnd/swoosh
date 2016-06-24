@@ -1,20 +1,38 @@
 ## Changelog
 
 ## v0.4.0-dev
+
+This version contains a couple of breaking changes, mostly due to the introduction of a `deliver!/2` (see below):
+* API-based adapter will now return a slightly different error payload: `{:error, {status_code, payload}}` instead of
+`{:error, body}`
+* `deliver/2` will no longer raise if the email validation failed.
+* We now only validate that the `From` address is present, according to the RFC 5322. This is the lowest common
+deminotar across all our adapters. This means we will **NO** longer check that a recipient is present (`to`, `cc`, `bcc`),
+that the subject is set, or that either of `html_body` or `text_body` is set.
+
 ### Added
 * Add Sendmail adapter.
+* Add a new `deliver!/2` function that will raise in case of an API or SMTP error, or if the email validation failed. In
+that case a `Swoosh.DeliveryError` will be raised.
 * Add Logger adapter. This can be useful when you don't want to send real emails but still want to know that the email
 has been sent sucessfully.
 * Add DKIM support for the SMTP and Sendmail adapter.
-* Add basic integration testing. We are now making real calls to the various providers' API (except Mandrill).
+* Add basic integration testing. We are now making real calls to the various providers' API during testing (except Mandrill).
 
 ### Changed
+* Raise on missing adapter config.
 * Refactor `Swoosh.Adapters.Local` to support configurable storage drivers. For now, only memory storage has been
 implemented.
-* Bump [gen_smtp](https://github.com/Vagabond/gen_smtp) to 0.10.0.
+* Generate case-insentitive Message-IDs in `Swoosh.Adapters.Local.Storage.Memory`. This was previously breaking endpoint
+with lowercase path rewrite.
+* Move email validation logic to base mailer. We also change the validation to follow the RFC and we now only check that
+a `From` email address is set.
+* Bump [gen_smtp](https://github.com/Vagabond/gen_smtp) to 0.11.0.
 
 ### Fixed
 * Show the actual port `Plug.Swoosh.MailboxPreview` is binding on.
+* Add [poison](https://github.com/devinus/poison) to the list of applications in the `mix.exs` file.
+* Handle 401 response for Mailgun properly. It's a text response so we don't try to JSON decode it anymore.
 
 ### Removed
 * `Swoosh.InMemoryMailbox` has been removed in favor of `Swoosh.Adapters.Local.Storage.Memory`. If you were using that
