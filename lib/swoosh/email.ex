@@ -87,7 +87,7 @@ defmodule Swoosh.Email do
 
   ## Examples
       iex> import Swoosh.Email
-      nil
+      Swoosh.Email
 
       iex> new
       %Swoosh.Email{}
