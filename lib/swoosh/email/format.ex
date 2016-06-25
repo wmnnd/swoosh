@@ -1,4 +1,6 @@
 defmodule Swoosh.Email.Format do
+  @moduledoc false
+
   def format_recipient(nil), do: ""
   def format_recipient({nil, address}), do: address
   def format_recipient({"", address}), do: address
