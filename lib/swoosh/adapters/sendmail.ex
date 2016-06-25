@@ -29,11 +29,13 @@ defmodule Swoosh.Adapters.Sendmail do
     Port.close(port)
   end
 
+  @doc false
   def cmd(email, config) do
     sender = SMTP.mail_from(email) |> shell_escape()
     "#{cmd_path(config)} -f#{sender}#{cmd_args(config)}"
   end
 
+  @doc false
   def cmd_path(config) do
     default = case config[:qmail] do
       true -> "/var/qmail/bin/qmail-inject"
@@ -42,6 +44,7 @@ defmodule Swoosh.Adapters.Sendmail do
     config[:cmd_path] || default
   end
 
+  @doc false
   def cmd_args(config) do
     case config[:qmail] do
       true -> ""
@@ -54,6 +57,7 @@ defmodule Swoosh.Adapters.Sendmail do
     end
   end
 
+  @doc false
   def shell_escape(s) do
     "'" <> String.replace(s, "'", "'\\''") <> "'"
   end

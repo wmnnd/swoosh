@@ -45,6 +45,7 @@ defmodule Swoosh.Adapters.SMTP do
     end
   end
 
+  @doc false
   def mail_from(email) do
     email.headers["Sender"] || elem(email.from, 1)
   end
