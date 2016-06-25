@@ -28,7 +28,7 @@ defmodule Swoosh.Adapters.Local do
     {:ok, %{id: id}}
   end
 
-  def storage_driver(config) do
+  defp storage_driver(config) do
     config[:storage_driver] || Swoosh.Adapters.Local.Storage.Memory
   end
 end

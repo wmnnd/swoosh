@@ -16,8 +16,8 @@ defmodule Swoosh.Adapter do
         raise_on_missing_config(missing_keys, config)
       end
 
-      def raise_on_missing_config([], _config), do: :ok
-      def raise_on_missing_config(key, config) do
+      defp raise_on_missing_config([], _config), do: :ok
+      defp raise_on_missing_config(key, config) do
         raise ArgumentError, """
         expected #{inspect key} to be set, got: #{inspect config}
         """

@@ -66,17 +66,17 @@ defmodule Swoosh.TestAssertions do
     end
   end
 
-  def assert_equal(email, {:subject, value}), do: assert email.subject == value
-  def assert_equal(email, {:from, value}), do: assert email.from == format_recipient(value)
-  def assert_equal(email, {:reply_to, value}), do: assert email.reply_to == format_recipient(value)
-  def assert_equal(email, {:to, value}) when is_list(value), do: assert email.to == Enum.map(value, &format_recipient/1)
-  def assert_equal(email, {:to, value}), do: assert format_recipient(value) in email.to
-  def assert_equal(email, {:cc, value}) when is_list(value), do: assert email.cc == Enum.map(value, &format_recipient/1)
-  def assert_equal(email, {:cc, value}), do: assert format_recipient(value) in email.cc
-  def assert_equal(email, {:bcc, value}) when is_list(value), do: assert email.bcc == Enum.map(value, &format_recipient/1)
-  def assert_equal(email, {:bcc, value}), do: assert format_recipient(value) in email.bcc
-  def assert_equal(email, {:text_body, value}), do: assert email.text_body == value
-  def assert_equal(email, {:html_body, value}), do: assert email.html_body == value
+  defp assert_equal(email, {:subject, value}), do: assert email.subject == value
+  defp assert_equal(email, {:from, value}), do: assert email.from == format_recipient(value)
+  defp assert_equal(email, {:reply_to, value}), do: assert email.reply_to == format_recipient(value)
+  defp assert_equal(email, {:to, value}) when is_list(value), do: assert email.to == Enum.map(value, &format_recipient/1)
+  defp assert_equal(email, {:to, value}), do: assert format_recipient(value) in email.to
+  defp assert_equal(email, {:cc, value}) when is_list(value), do: assert email.cc == Enum.map(value, &format_recipient/1)
+  defp assert_equal(email, {:cc, value}), do: assert format_recipient(value) in email.cc
+  defp assert_equal(email, {:bcc, value}) when is_list(value), do: assert email.bcc == Enum.map(value, &format_recipient/1)
+  defp assert_equal(email, {:bcc, value}), do: assert format_recipient(value) in email.bcc
+  defp assert_equal(email, {:text_body, value}), do: assert email.text_body == value
+  defp assert_equal(email, {:html_body, value}), do: assert email.html_body == value
 
   @doc ~S"""
   Asserts `email` was not sent.
