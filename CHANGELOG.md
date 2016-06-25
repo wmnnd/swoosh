@@ -1,6 +1,6 @@
 ## Changelog
 
-## v0.4.0-dev
+## v0.4.0 - 2016-06-25
 
 This version contains a couple of breaking changes, mostly due to the introduction of a `deliver!/2` (see below):
 * API-based adapter will now return a slightly different error payload: `{:error, {status_code, payload}}` instead of
