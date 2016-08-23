@@ -13,11 +13,11 @@ defmodule Swoosh.Integration.Adapters.PostmarkTest do
   test "simple deliver", %{config: config} do
     email =
       new
-      |> from({"Swoosh Postmark", "swoosh#{config[:domain]}"})
-      |> reply_to("swoosh+replyto#{config[:domain]}")
-      |> to("swoosh+to#{config[:domain]}")
-      |> cc("swoosh+cc#{config[:domain]}")
-      |> bcc("swoosh+bcc#{config[:domain]}")
+      |> from({"Swoosh Postmark", "swoosh@#{config[:domain]}"})
+      |> reply_to("swoosh+replyto@#{config[:domain]}")
+      |> to("swoosh+to@#{config[:domain]}")
+      |> cc("swoosh+cc@#{config[:domain]}")
+      |> bcc("swoosh+bcc@#{config[:domain]}")
       |> subject("Swoosh - Postmark integration test")
       |> text_body("This email was sent by the Swoosh library automation testing")
       |> html_body("<p>This email was sent by the Swoosh library automation testing</p>")
