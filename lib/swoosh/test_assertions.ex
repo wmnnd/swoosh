@@ -8,7 +8,7 @@ defmodule Swoosh.TestAssertions do
   """
 
   import ExUnit.Assertions
-  import Swoosh.EmailHelpers
+  import Swoosh.Email.Format
 
   alias Swoosh.Email
 

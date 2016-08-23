@@ -20,10 +20,10 @@ defmodule Swoosh.Adapters.Sendmail do
   use Swoosh.Adapter
 
   alias Swoosh.Email
-  alias Swoosh.Adapters.SMTP
+  alias Swoosh.Adapters.SMTP.Helpers
 
   def deliver(%Email{} = email, config) do
-    body = SMTP.encode_message(email, config)
+    body = Helpers.body(email, config)
     port = Port.open({:spawn, cmd(email, config)}, [:binary])
     Port.command(port, body)
     Port.close(port)
@@ -31,7 +31,7 @@ defmodule Swoosh.Adapters.Sendmail do
 
   @doc false
   def cmd(email, config) do
-    sender = SMTP.mail_from(email) |> shell_escape()
+    sender = Helpers.sender(email) |> shell_escape()
     "#{cmd_path(config)} -f#{sender}#{cmd_args(config)}"
   end
 

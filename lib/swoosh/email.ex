@@ -52,7 +52,7 @@ defmodule Swoosh.Email do
       email = new(from: "tony.stark@example.com", to: "steve.rogers@example.com", subject: "Hello, Avengers!")
   """
 
-  import Swoosh.EmailHelpers
+  import Swoosh.Email.Format
 
   defstruct subject: "", from: nil, to: [], cc: [], bcc: [], text_body: nil,
             html_body: nil, attachments: nil, reply_to: nil, headers: %{},
