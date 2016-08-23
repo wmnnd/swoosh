@@ -13,11 +13,11 @@ defmodule Swoosh.Integration.Adapters.SendgridTest do
   test "simple deliver", %{config: config} do
     email =
       new
-      |> from({"Swoosh Sendgrid", "swoosh+sendgrid#{config[:domain]}"})
-      |> reply_to("swoosh+replyto#{config[:domain]}")
-      |> to("swoosh+to#{config[:domain]}")
-      |> cc("swoosh+cc#{config[:domain]}")
-      |> bcc("swoosh+bcc#{config[:domain]}")
+      |> from({"Swoosh Sendgrid", "swoosh+sendgrid@#{config[:domain]}"})
+      |> reply_to("swoosh+replyto@#{config[:domain]}")
+      |> to("swoosh+to@#{config[:domain]}")
+      |> cc("swoosh+cc@#{config[:domain]}")
+      |> bcc("swoosh+bcc@#{config[:domain]}")
       |> subject("Swoosh - Sendgrid integration test")
       |> text_body("This email was sent by the Swoosh library automation testing")
       |> html_body("<p>This email was sent by the Swoosh library automation testing</p>")
