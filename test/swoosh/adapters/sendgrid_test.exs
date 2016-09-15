@@ -36,7 +36,7 @@ defmodule Swoosh.Adapters.SendgridTest do
     assert Sendgrid.deliver(email, config) == {:ok, %{}}
   end
 
-  test "text-only delivery returns :ok", %{bypass: bypass, config: config, valid_email: email} do
+  test "text-only delivery returns :ok", %{bypass: bypass, config: config} do
     email =
       new
       |> from("tony.stark@example.com")
@@ -60,7 +60,7 @@ defmodule Swoosh.Adapters.SendgridTest do
     assert Sendgrid.deliver(email, config) == {:ok, %{}}
   end
 
-  test "html-only delivery returns :ok", %{bypass: bypass, config: config, valid_email: email} do
+  test "html-only delivery returns :ok", %{bypass: bypass, config: config} do
     email =
       new
       |> from("tony.stark@example.com")

@@ -40,6 +40,7 @@ defmodule Swoosh.Adapters.SMTP.Helpers do
     |> prepare_mime_version
     |> prepare_reply_to(email)
     |> prepare_subject(email)
+    |> prepare_bcc(email)
     |> prepare_cc(email)
     |> prepare_to(email)
     |> prepare_from(email)
@@ -53,6 +54,9 @@ defmodule Swoosh.Adapters.SMTP.Helpers do
 
   defp prepare_cc(headers, %Email{cc: []}), do: headers
   defp prepare_cc(headers, %Email{cc: cc}), do: [{"Cc", render_recipient(cc)} | headers]
+
+  defp prepare_bcc(headers, %Email{bcc: []}), do: headers
+  defp prepare_bcc(headers, %Email{bcc: bcc}), do: [{"Bcc", render_recipient(bcc)} | headers]
 
   defp prepare_reply_to(headers, %Email{reply_to: nil}), do: headers
   defp prepare_reply_to(headers, %Email{reply_to: reply_to}), do: [{"Reply-To", render_recipient(reply_to)} | headers]
