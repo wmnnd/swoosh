@@ -61,6 +61,7 @@ defmodule Swoosh.Email.SMTPTest do
         {"From", "tony@stark.com"},
         {"To", "Janet Pym <wasp@avengers.com>, steve@rogers.com"},
         {"Cc", "thor@odinson.com, Bruce Banner <hulk@smash.com>"},
+        {"Bcc", "beast@avengers.com, Clinton Francis Barton <hawk@eye.com>"},
         {"Subject", "Hello, Avengers!"},
         {"Reply-To", "black@widow.com"},
         {"Mime-Version", "1.0"},
