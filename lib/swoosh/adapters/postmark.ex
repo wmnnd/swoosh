@@ -27,7 +27,7 @@ defmodule Swoosh.Adapters.Postmark do
   def deliver(%Email{} = email, config \\ []) do
     headers = prepare_headers(config)
     params = email |> prepare_body |> Poison.encode!
-    url = [base_url(config), @api_endpoint]
+    url = [base_url(config), api_endpoint(email)]
 
     case :hackney.post(url, headers, params, [:with_body]) do
       {:ok, 200, _headers, body} ->
@@ -48,6 +48,11 @@ defmodule Swoosh.Adapters.Postmark do
      {"Accept", "application/json"}]
   end
 
+  defp api_endpoint(%Email{provider_options: %{template_id: _, template_model: _}}),
+    do: @api_endpoint <> "/withTemplate"
+  defp api_endpoint(_email),
+    do: @api_endpoint
+
   defp prepare_body(email) do
     %{}
     |> prepare_from(email)
@@ -58,6 +63,7 @@ defmodule Swoosh.Adapters.Postmark do
     |> prepare_cc(email)
     |> prepare_bcc(email)
     |> prepare_reply_to(email)
+    |> prepare_template(email)
   end
 
   defp prepare_from(body, %Email{from: {_name, address}}), do: Map.put(body, "From", address)
@@ -82,11 +88,28 @@ defmodule Swoosh.Adapters.Postmark do
   defp prepare_recipient({"", address}), do: address
   defp prepare_recipient({name, address}), do: "\"#{name}\" <#{address}>"
 
+  defp prepare_subject(body, %Email{subject: ""}), do: body
   defp prepare_subject(body, %Email{subject: subject}), do: Map.put(body, "Subject", subject)
 
-  defp prepare_text(body, %{text_body: nil}), do: body
-  defp prepare_text(body, %{text_body: text_body}), do: Map.put(body, "TextBody", text_body)
+  defp prepare_text(body, %Email{text_body: nil}), do: body
+  defp prepare_text(body, %Email{text_body: text_body}), do: Map.put(body, "TextBody", text_body)
 
-  defp prepare_html(body, %{html_body: nil}), do: body
-  defp prepare_html(body, %{html_body: html_body}), do: Map.put(body, "HtmlBody", html_body)
+  defp prepare_html(body, %Email{html_body: nil}), do: body
+  defp prepare_html(body, %Email{html_body: html_body}), do: Map.put(body, "HtmlBody", html_body)
+
+  # example custom vars
+  #
+  # %{
+  #   "template_id"    => 123,
+  #   "template_model" => %{"name": 1, "company": 2}
+  # }
+  defp prepare_template(body, %Email{provider_options: provider_options}),
+    do: Enum.reduce(provider_options, body, &put_in_body/2)
+  defp prepare_template(body, _email), do: body
+
+  defp put_in_body({:template_model, val}, body_acc),
+    do: Map.put(body_acc, "TemplateModel", val)
+  defp put_in_body({:template_id, val}, body_acc),
+    do: Map.put(body_acc, "TemplateId", val)
+  defp put_in_body(_, body_acc), do: body_acc
 end
