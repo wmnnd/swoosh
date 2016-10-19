@@ -1,7 +1,5 @@
 defmodule Swoosh.Adapters.SMTP.Helpers do
-  @moduledoc '''
-  Prepares a %Swoosh.Email{} for SMTP use
-  '''
+  @moduledoc false
 
   alias Swoosh.Email
 
