@@ -36,7 +36,7 @@ defmodule Swoosh.Integration.Adapters.PostmarkTest do
     }
     email =
       valid_email
-      |> put_provider_option(:template_id, 968101)
+      |> put_provider_option(:template_id, 990321)
       |> put_provider_option(:template_model, template_model)
 
     assert_ok_response(email, config)
