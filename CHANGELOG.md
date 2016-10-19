@@ -1,5 +1,24 @@
 ## Changelog
 
+## v0.5.0 - 2016-10-19
+
+### Added
+* The Mailgun adapter now supports [attaching data](https://documentation.mailgun.com/user_manual.html#attaching-data-to-messages) to emails.
+* The Postmark adapter now supports using [server-side templates](http://developer.postmarkapp.com/developer-api-templates.html#email-with-template).
+
+### Changed
+* The Sendgrid adapter now uses the [Sendgrid v3 API](https://sendgrid.com/docs/API_Reference/Web_API_v3/Mail/index.html).
+* `gen_stmp` is now an optional dependency.
+* Drop HTTPoison in favor of hackney.
+* Enlarge the message area in the preview Plug.
+* Bump [poison](https://github.com/devinus/poison) to 3.0.
+* Bump [plug](https://github.com/elixir-lang/plug) to 1.2.
+
+### Fixed
+* The SMTP and Sendmail adapters now correctly set the `Bcc` header.
+* The Postmark adapter now respects the `From` name.
+* Replace `:crypt.rand_bytes/1` by `:crypto.strong_rand_bytes/1` since it was deprecated with OTP 19.
+
 ## v0.4.0 - 2016-06-25
 
 This version contains a couple of breaking changes, mostly due to the introduction of a `deliver!/2` (see below):
