@@ -1,5 +1,17 @@
 ## Changelog
 
+## v0.6.0 - 2016-02-13
+
+### Added
+* The Sendgrid adapter now supports server-side templates and substitutions.
+
+### Changed
+* Cowboy dependency was relaxed to ~> 1.0 (from ~> 1.0.0).
+* Load Sendmail and SMTP.Helpers if :mimemail is loaded.
+
+### Fixed
+* Fix compiler warnings for Elixir 1.4.
+
 ## v0.5.0 - 2016-10-19
 
 ### Added
