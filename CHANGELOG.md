@@ -1,6 +1,6 @@
 ## Changelog
 
-## v0.6.0 - 2016-02-13
+## v0.6.0 - 2017-02-13
 
 ### Added
 * The Sendgrid adapter now supports server-side templates and substitutions.
