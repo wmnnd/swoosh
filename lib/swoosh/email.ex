@@ -33,7 +33,7 @@ defmodule Swoosh.Email do
   ## Examples
 
       email =
-        new
+        new()
         |> to("tony.stark@example.com")
         |> from("bruce.banner@example.com")
         |> text_body("Welcome to the Avengers")
@@ -86,7 +86,7 @@ defmodule Swoosh.Email do
   fields that it doesn't know about.
 
   ## Examples
-      iex> new
+      iex> new()
       %Swoosh.Email{}
 
       iex> new(subject: "Hello, Avengers!")
@@ -171,12 +171,12 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> from({"Steve Rogers", "steve.rogers@example.com"})
+      iex> new() |> from({"Steve Rogers", "steve.rogers@example.com"})
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: {"Steve Rogers", "steve.rogers@example.com"},
        headers: %{}, html_body: nil, private: %{}, provider_options: %{},
        reply_to: nil, subject: "", text_body: nil, to: []}
 
-      iex> new |> from("steve.rogers@example.com")
+      iex> new() |> from("steve.rogers@example.com")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: {"", "steve.rogers@example.com"},
        headers: %{}, html_body: nil, private: %{}, provider_options: %{},
        reply_to: nil, subject: "", text_body: nil, to: []}
@@ -195,12 +195,12 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> reply_to({"Steve Rogers", "steve.rogers@example.com"})
+      iex> new() |> reply_to({"Steve Rogers", "steve.rogers@example.com"})
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
        headers: %{}, html_body: nil, private: %{}, provider_options: %{},
        reply_to: {"Steve Rogers", "steve.rogers@example.com"}, subject: "", text_body: nil, to: []}
 
-      iex> new |> reply_to("steve.rogers@example.com")
+      iex> new() |> reply_to("steve.rogers@example.com")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
        headers: %{}, html_body: nil, private: %{}, provider_options: %{},
        reply_to: {"", "steve.rogers@example.com"}, subject: "", text_body: nil, to: []}
@@ -218,7 +218,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> subject("Hello, Avengers!")
+      iex> new() |> subject("Hello, Avengers!")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
        cc: [], from: nil, headers: %{}, html_body: nil,
        private: %{}, provider_options: %{}, reply_to: nil, subject: "Hello, Avengers!",
@@ -234,7 +234,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> text_body("Hello")
+      iex> new() |> text_body("Hello")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
        cc: [], from: nil, headers: %{}, html_body: nil,
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
@@ -250,7 +250,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> html_body("<h1>Hello</h1>")
+      iex> new() |> html_body("<h1>Hello</h1>")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
        cc: [], from: nil, headers: %{}, html_body: "<h1>Hello</h1>",
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
@@ -265,7 +265,7 @@ defmodule Swoosh.Email do
   The recipient must be; a tuple specifying the name and address of the recipient; a string specifying the
   address of the recipient; or an array comprised of a combination of either.
 
-      iex> new |> bcc("steve.rogers@example.com")
+      iex> new() |> bcc("steve.rogers@example.com")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [{"", "steve.rogers@example.com"}],
        cc: [], from: nil, headers: %{}, html_body: nil,
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
@@ -307,7 +307,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> cc("steve.rogers@example.com")
+      iex> new() |> cc("steve.rogers@example.com")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
        cc: [{"", "steve.rogers@example.com"}], from: nil, headers: %{}, html_body: nil,
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
@@ -349,7 +349,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> to("steve.rogers@example.com")
+      iex> new() |> to("steve.rogers@example.com")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [],
        cc: [], from: nil, headers: %{}, html_body: nil,
        private: %{}, provider_options: %{}, reply_to: nil, subject: "",
@@ -390,7 +390,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> header("X-Magic-Number", "7")
+      iex> new() |> header("X-Magic-Number", "7")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
        headers: %{"X-Magic-Number" => "7"}, html_body: nil, private: %{},
        provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
@@ -419,7 +419,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> put_private(:phoenix_template, "welcome.html")
+      iex> new() |> put_private(:phoenix_template, "welcome.html")
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
        headers: %{}, html_body: nil, private: %{phoenix_template: "welcome.html"},
        provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}
@@ -437,7 +437,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> put_provider_option(:async, true)
+      iex> new() |> put_provider_option(:async, true)
       %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: nil,
        headers: %{}, html_body: nil, private: %{}, provider_options: %{async: true},
        reply_to: nil, subject: "", text_body: nil, to: []}
@@ -455,7 +455,7 @@ defmodule Swoosh.Email do
 
   ## Examples
 
-      iex> new |> assign(:username, "ironman")
+      iex> new() |> assign(:username, "ironman")
       %Swoosh.Email{assigns: %{username: "ironman"}, attachments: nil, bcc: [],
        cc: [], from: nil, headers: %{}, html_body: nil, private: %{},
        provider_options: %{}, reply_to: nil, subject: "", text_body: nil, to: []}

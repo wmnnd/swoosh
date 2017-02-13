@@ -15,7 +15,7 @@ defmodule Swoosh.Integration.Adapters.MailgunTest do
 
   test "simple deliver", %{config: config} do
     email =
-      new
+      new()
       |> from({"Swoosh Mailgun", "swoosh@#{config[:domain]}"})
       |> reply_to("swoosh+replyto@#{config[:domain]}")
       |> to("swoosh+to@#{config[:domain]}")
@@ -32,7 +32,7 @@ defmodule Swoosh.Integration.Adapters.MailgunTest do
     config = Keyword.put(config, :api_key, "bad_key")
 
     email =
-      new
+      new()
       |> from({"Swoosh Mailgun", "swoosh@#{config[:domain]}"})
       |> to("swoosh+to@#{config[:domain]}")
       |> subject("Swoosh - Mailgun integration test")

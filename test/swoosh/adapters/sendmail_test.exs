@@ -6,7 +6,7 @@ defmodule Swoosh.Adapters.SendmailTest do
 
   setup_all do
     valid_email =
-      new
+      new()
       |> from("tony.stark@example.com")
       |> to("steve.rogers@example.com")
       |> subject("Hello, Avengers!")

@@ -20,7 +20,7 @@ defmodule Swoosh.Adapters.PostmarkTest do
               api_key: "jarvis"]
 
     valid_email =
-      new
+      new()
       |> from("steve.rogers@example.com")
       |> to("tony.stark@example.com")
       |> subject("Hello, Avengers!")
@@ -48,7 +48,7 @@ defmodule Swoosh.Adapters.PostmarkTest do
 
   test "delivery/1 with all fields returns :ok", %{bypass: bypass, config: config} do
     email =
-      new
+      new()
       |> from({"T Stark", "tony.stark@example.com"})
       |> to("wasp.avengers@example.com")
       |> to({"Steve Rogers", "steve.rogers@example.com"})
@@ -90,7 +90,7 @@ defmodule Swoosh.Adapters.PostmarkTest do
       company: "Avengers",
     }
     email =
-      new
+      new()
       |> from({"T Stark", "tony.stark@example.com"})
       |> to("avengers@example.com")
       |> put_provider_option(:template_id,    1)

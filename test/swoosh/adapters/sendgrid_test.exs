@@ -9,7 +9,7 @@ defmodule Swoosh.Adapters.SendgridTest do
     config = [api_key: "123", base_url: "http://localhost:#{bypass.port}"]
 
     valid_email =
-      new
+      new()
       |> from("tony.stark@example.com")
       |> to("steve.rogers@example.com")
       |> subject("Hello, Avengers!")
@@ -38,7 +38,7 @@ defmodule Swoosh.Adapters.SendgridTest do
 
   test "text-only delivery returns :ok", %{bypass: bypass, config: config} do
     email =
-      new
+      new()
       |> from("tony.stark@example.com")
       |> to("steve.rogers@example.com")
       |> subject("Hello, Avengers!")
@@ -62,7 +62,7 @@ defmodule Swoosh.Adapters.SendgridTest do
 
   test "html-only delivery returns :ok", %{bypass: bypass, config: config} do
     email =
-      new
+      new()
       |> from("tony.stark@example.com")
       |> to("steve.rogers@example.com")
       |> subject("Hello, Avengers!")
@@ -86,7 +86,7 @@ defmodule Swoosh.Adapters.SendgridTest do
 
   test "delivery/1 with all fields returns :ok", %{bypass: bypass, config: config} do
     email =
-      new
+      new()
       |> from({"T Stark", "tony.stark@example.com"})
       |> to({"Steve Rogers", "steve.rogers@example.com"})
       |> reply_to("hulk.smash@example.com")
@@ -120,7 +120,7 @@ defmodule Swoosh.Adapters.SendgridTest do
 
   test "delivery/1 with custom variables returns :ok", %{bypass: bypass, config: config} do
     email =
-      new
+      new()
       |> from({"T Stark", "tony.stark@example.com"})
       |> to({"Steve Rogers", "steve.rogers@example.com"})
       |> reply_to("hulk.smash@example.com")
@@ -156,7 +156,7 @@ defmodule Swoosh.Adapters.SendgridTest do
 
   test "delivery/1 with template_id returns :ok", %{bypass: bypass, config: config} do
     email =
-      new
+      new()
       |> from({"T Stark", "tony.stark@example.com"})
       |> to({"Steve Rogers", "steve.rogers@example.com"})
       |> subject("Hello, Avengers!")
@@ -184,7 +184,7 @@ defmodule Swoosh.Adapters.SendgridTest do
 
   test "delivery/1 with substitutions returns :ok", %{bypass: bypass, config: config} do
     email =
-      new
+      new()
       |> from({"T Stark", "tony.stark@example.com"})
       |> to({"Steve Rogers", "steve.rogers@example.com"})
       |> subject("Hello, Avengers!")

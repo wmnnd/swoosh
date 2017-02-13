@@ -19,7 +19,7 @@ defmodule Swoosh.Integration.Adapters.SMTPTest do
 
   test "simple deliver", %{config: config} do
     email =
-      new
+      new()
       |> from({"Swoosh SMTP", "swoosh+smtp@#{config[:domain]}"})
       |> reply_to("swoosh+replyto@#{config[:domain]}")
       |> to("swoosh+to@#{config[:domain]}")

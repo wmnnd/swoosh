@@ -12,7 +12,7 @@ defmodule Swoosh.Integration.Adapters.SendgridTest do
 
   test "simple deliver", %{config: config} do
     email =
-      new
+      new()
       |> from({"Swoosh Sendgrid", "swoosh+sendgrid@#{config[:domain]}"})
       |> reply_to("swoosh+replyto@#{config[:domain]}")
       |> to("swoosh+to@#{config[:domain]}")

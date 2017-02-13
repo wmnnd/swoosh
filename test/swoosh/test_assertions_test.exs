@@ -6,7 +6,7 @@ defmodule Swoosh.TestAssertionsTest do
 
   setup do
     email =
-      new
+      new()
       |> from("tony.stark@example.com")
       |> to("steve.rogers@example.com")
       |> subject("Hello, Avengers!")
@@ -100,7 +100,7 @@ defmodule Swoosh.TestAssertionsTest do
 
   test "assert email sent with wrong email" do
     try do
-      wrong_email = new |> subject("Wrong, Avengers!")
+      wrong_email = new() |> subject("Wrong, Avengers!")
       assert_email_sent wrong_email
     rescue
       error in [ExUnit.AssertionError] ->
@@ -114,7 +114,7 @@ defmodule Swoosh.TestAssertionsTest do
   end
 
   test "assert email not sent with unexpected email" do
-    unexpected_email = new |> subject("Testing Avenger")
+    unexpected_email = new() |> subject("Testing Avenger")
     assert_email_not_sent unexpected_email
   end
 
@@ -132,12 +132,12 @@ defmodule Swoosh.TestAssertionsTest do
     receive do
       _ -> nil
     end
-    assert_no_email_sent
+    assert_no_email_sent()
   end
 
   test "assert no email sent when sending an email" do
     try do
-      assert_no_email_sent
+      assert_no_email_sent()
     rescue
       error in [ExUnit.AssertionError] ->
         "Unexpectedly received message {:email, %Swoosh.Email{assigns: %{}, attachments: nil, bcc: [], cc: [], from: {\"\", \"tony.stark@example.com\"}, headers: %{}, html_body: nil, private: %{}, provider_options: %{}, reply_to: nil, subject: \"Hello, Avengers!\", text_body: nil, to: [{\"\", \"steve.rogers@example.com\"}]}} " <>

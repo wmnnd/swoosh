@@ -8,7 +8,7 @@ defmodule Swoosh.Integration.Adapters.PostmarkTest do
   setup_all do
     config = [api_key: System.get_env("POSTMARK_API_KEY"), domain: System.get_env("POSTMARK_DOMAIN")]
     valid_email =
-      new
+      new()
       |> from({"Swoosh Postmark", "swoosh@#{config[:domain]}"})
       |> reply_to("swoosh+replyto@#{config[:domain]}")
       |> to("swoosh+to@#{config[:domain]}")

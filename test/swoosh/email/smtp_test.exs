@@ -7,7 +7,7 @@ defmodule Swoosh.Email.SMTPTest do
 
   setup_all do
     valid_email =
-      new
+      new()
       |> from("tony@stark.com")
       |> to("steve@rogers.com")
       |> subject("Hello, Avengers!")
