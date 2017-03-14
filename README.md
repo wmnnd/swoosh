@@ -60,7 +60,7 @@ end
 
     ```elixir
     def deps do
-      [{:swoosh, "~> 0.6.0"}]
+      [{:swoosh, "~> 0.7.0"}]
     end
     ```
 
@@ -80,7 +80,7 @@ end
     end
 
     def deps do
-      [{:swoosh, "~> 0.6.0"},
+      [{:swoosh, "~> 0.7.0"},
        {:gen_smtp, "~> 0.11.0"}]
     end
     ```
