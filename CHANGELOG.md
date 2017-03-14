@@ -1,5 +1,15 @@
 ## Changelog
 
+## v0.7.0 - 2017-03-14
+
+### Added
+* Add [SparkPost](https://www.sparkpost.com) adapter.
+
+### Changed
+* Bump [poison](https://github.com/devinus/poison) to 3.1.
+* Bump [plug](https://github.com/elixir-lang/plug) to 1.3.3.
+* Bump [hackney](https://github.com/benoitc/hackney) to 1.7.1.
+
 ## v0.6.0 - 2017-02-13
 
 ### Added
