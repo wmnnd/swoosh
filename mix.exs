@@ -25,7 +25,7 @@ defmodule Swoosh.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :poison, :hackney],
+    [applications: [:logger, :poison, :hackney, :mime],
      mod: {Swoosh.Application, []}]
   end
 
@@ -34,12 +34,13 @@ defmodule Swoosh.Mixfile do
 
   defp deps do
     [{:hackney, "~> 1.6"},
+     {:mime, "~> 1.1"},
      {:poison, "~> 1.5 or ~> 2.0 or ~> 3.0"},
      {:gen_smtp, "~> 0.11", optional: true},
      {:cowboy, "~> 1.0", optional: true},
      {:plug, "~> 1.1", optional: true},
      {:credo, "~> 0.4", only: [:dev, :test]},
-     {:bypass, "~> 0.5", only: [:test]},
+     {:bypass, "~> 0.5", only: :test},
      {:ex_doc, "~> 0.13", only: :docs},
      {:inch_ex, ">= 0.0.0", only: :docs}]
   end
