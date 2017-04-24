@@ -6,6 +6,10 @@
 * Add support for attachments.
 * Add support for [categories](https://sendgrid.com/docs/API_Reference/api_v3.html) in the Sendgrid adapter
 
+### Changed
+* Bump [plug](https://github.com/elixir-lang/plug) to 1.3.5.
+* Bump [hackney](https://github.com/benoitc/hackney) to 1.8.0.
+
 ## v0.7.0 - 2017-03-14
 
 ### Added
