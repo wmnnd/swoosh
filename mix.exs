@@ -39,7 +39,7 @@ defmodule Swoosh.Mixfile do
      {:gen_smtp, "~> 0.11", optional: true},
      {:cowboy, "~> 1.0", optional: true},
      {:plug, "~> 1.1", optional: true},
-     {:credo, "~> 0.4", only: [:dev, :test]},
+     {:credo, "~> 0.7", only: [:dev, :test]},
      {:bypass, "~> 0.5", only: :test},
      {:ex_doc, "~> 0.15", only: :docs},
      {:inch_ex, ">= 0.0.0", only: :docs}]
