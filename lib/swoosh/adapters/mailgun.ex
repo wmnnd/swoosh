@@ -27,10 +27,9 @@ defmodule Swoosh.Adapters.Mailgun do
 
   def deliver(%Email{} = email, config \\ []) do
     headers = prepare_headers(email, config)
-    params = email |> prepare_body |> Plug.Conn.Query.encode
     url = [base_url(config), "/", config[:domain], @api_endpoint]
 
-    case :hackney.post(url, headers, params, [:with_body]) do
+    case :hackney.post(url, headers, prepare_body(email), [:with_body]) do
       {:ok, 200, _headers, body} ->
         {:ok, %{id: Poison.decode!(body)["id"]}}
       {:ok, 401, _headers, body} ->
@@ -52,9 +51,8 @@ defmodule Swoosh.Adapters.Mailgun do
 
   defp auth(config), do: Base.encode64("api:#{config[:api_key]}")
 
-  defp content_type(%Email{attachments: nil}), do: "application/x-www-form-urlencoded"
-  defp content_type(%Email{attachments: []}), do: "application/x-www-form-urlencoded"
-  defp content_type(%Email{}), do: "multipart/form-data"
+  defp content_type(%{attachments: []}), do: "application/x-www-form-urlencoded"
+  defp content_type(%{}), do: "multipart/form-data"
 
   defp prepare_body(email) do
     %{}
@@ -66,7 +64,9 @@ defmodule Swoosh.Adapters.Mailgun do
     |> prepare_cc(email)
     |> prepare_bcc(email)
     |> prepare_reply_to(email)
+    |> prepare_attachments(email)
     |> prepare_custom_vars(email)
+    |> encode_body
   end
 
   # example custom_vars
@@ -79,6 +79,18 @@ defmodule Swoosh.Adapters.Mailgun do
   end
   defp prepare_custom_vars(body, _email), do: body
 
+  defp prepare_attachments(body, %{attachments: []}), do: body
+  defp prepare_attachments(body, %{attachments: attachments}) do
+    Map.put(body, :attachments, Enum.map(attachments, &prepare_file(&1)))
+  end
+
+  defp prepare_file(attachment) do
+    {:file, attachment.path,
+     {"form-data",
+      [{~s/"name"/, ~s/"attachment"/},
+       {~s/"filename"/, ~s/"#{attachment.filename}"/}]},
+     []}
+  end
 
   defp prepare_from(body, %Email{from: from}), do: Map.put(body, :from, prepare_recipient(from))
 
@@ -109,4 +121,13 @@ defmodule Swoosh.Adapters.Mailgun do
 
   defp prepare_html(body, %{html_body: nil}), do: body
   defp prepare_html(body, %{html_body: html_body}), do: Map.put(body, :html, html_body)
+
+  defp encode_body(%{attachments: attachments} = params) do
+    {:multipart,
+     params
+     |> Map.drop([:attachments])
+     |> Enum.map(fn {k, v} -> {to_string(k), v} end)
+     |> Kernel.++(attachments)}
+  end
+  defp encode_body(no_attachments), do: Plug.Conn.Query.encode(no_attachments)
 end
