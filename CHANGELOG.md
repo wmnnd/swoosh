@@ -1,5 +1,11 @@
 ## Changelog
 
+## v0.8.0-dev
+
+### Added
+* Add support for attachments.
+* Add support for [categories](https://sendgrid.com/docs/API_Reference/api_v3.html) in the Sendgrid adapter
+
 ## v0.7.0 - 2017-03-14
 
 ### Added
