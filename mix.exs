@@ -71,7 +71,7 @@ defmodule Swoosh.Mixfile do
   end
 
   defp package do
-    [maintainers: ["Steve Domin", "Baris Balic"],
+    [maintainers: ["Steve Domin", "Baris Balic", "Po Chen"],
      licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/swoosh/swoosh"}]
   end
