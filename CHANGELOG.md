@@ -1,6 +1,6 @@
 ## Changelog
 
-## v0.8.0-dev
+## v0.8.0 - 2017-05-06
 
 ### Added
 * Add support for attachments.
