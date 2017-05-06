@@ -60,11 +60,11 @@ end
 
     ```elixir
     def deps do
-      [{:swoosh, "~> 0.7.0"}]
+      [{:swoosh, "~> 0.8.0"}]
     end
     ```
 
-2. Ensure swoosh is started before your application:
+2. (Optional - only for Elixir < 1.4) Ensure swoosh is started before your application:
 
     ```elixir
     def application do
@@ -75,12 +75,13 @@ end
 3. (Optional) If you are using `Swoosh.Adapters.SMTP` or `Swoosh.Adapters.Sendmail`, you also need to add gen_stmp to your deps and list of applications:
 
     ```elixir
+    # You only need to do this if you are using Elixir < 1.4
     def application do
       [applications: [:swoosh, :gen_smtp]]
     end
 
     def deps do
-      [{:swoosh, "~> 0.7.0"},
+      [{:swoosh, "~> 0.8.0"},
        {:gen_smtp, "~> 0.11.0"}]
     end
     ```
