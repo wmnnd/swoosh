@@ -460,6 +460,10 @@ defmodule Swoosh.Email do
   @doc ~S"""
   Add a new attachment in the email.
 
+  You can pass the path to a file, a `Swoosh.Attachment` or a `%Plug.Upload{}` struct
+  as an argument. If you give a path we will detect the MIME type and determine the filename
+  automatically.
+
   ## Examples
 
       iex> new() |> attachment("/data/att.zip")

@@ -150,6 +150,22 @@ end
 
 Feels familiar doesn't it? Head to the [phoenix_swoosh](https://github.com/swoosh/phoenix_swoosh) repo for more details.
 
+## Attachments
+
+You can attach files to your email using the `Swoosh.Email.attachment/2` function. Just give the path of your
+file as an argument and we will do the rest. It also works with a `%Plug.Upload{}` struct.
+
+All built-in adapters have support for attachments.
+
+```
+new()
+|> to("peter@example.com")
+|> from({"Jarvis", "jarvis@example.com"})
+|> subject("Invoice May")
+|> text_body("Here is the invoice for your superhero services in May.")
+|> attachment("/Users/jarvis/invoice-peter-may.pdf")
+```
+
 ## Testing
 
 In your `config/test.exs` file set your mailer's adapter to `Swoosh.Adapters.Test` so that you can use the assertions

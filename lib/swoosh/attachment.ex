@@ -1,6 +1,6 @@
 defmodule Swoosh.Attachment do
   @moduledoc """
-  Struct representing an attachment in an email
+  Struct representing an attachment in an email.
   """
 
   defstruct filename: nil, content_type: nil, path: nil
