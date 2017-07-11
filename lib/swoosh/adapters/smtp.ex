@@ -40,6 +40,8 @@ if Code.ensure_loaded?(:gen_smtp_client) do
       sender = Helpers.sender(email)
       recipients = all_recipients(email)
       body = Helpers.body(email, config)
+      IO.puts("About to send with config:")
+      IO.inspect(config)
       case :gen_smtp_client.send_blocking({sender, recipients, body}, config) do
         receipt when is_binary(receipt) -> {:ok, receipt}
         {:error, type, message} -> {:error, {type, message}}
